@@ -14,6 +14,9 @@ class EventType(Enum):
     GAME_OVER = auto()
     GAME_RESET = auto()
 
+    PILE_ADDED = auto()
+    PILE_REMOVED = auto()
+
 
 class Events:
     def __init__(self):

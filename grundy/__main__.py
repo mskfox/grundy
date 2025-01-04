@@ -1,6 +1,6 @@
 from .core import Engine
 from .core import Scene
-from .nodes import GradientNode, ParticlesNode
+from .nodes import GradientNode, ParticlesNode, AtomsNode
 
 
 class DemoScene(Scene):
@@ -17,6 +17,9 @@ class DemoScene(Scene):
             0.000025
         )
         self.add_node(particles)
+
+        atoms = AtomsNode(self.engine)
+        self.add_node(atoms)
 
     def on_update(self, ct: float, dt: float) -> None:
         pass
@@ -44,6 +47,12 @@ def main() -> None:
     engine.scenes.register("empty", EmptyScene)
 
     engine.scenes.switch_to("demo")
+
+    id = 0
+    for pile in engine.logic.get_piles().values():
+        id = pile.id
+
+    engine.logic.make_move(id, 3)
 
     engine.run()
 

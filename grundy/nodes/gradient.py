@@ -44,12 +44,15 @@ class GradientNode(Node):
         """
         Draw or redraw the gradient
         """
-        self.engine.canvas.delete(self._tag)
-        self.engine.canvas.create_gradient(
+        canvas = self.engine.canvas
+        canvas.delete(self._tag)
+        canvas.create_gradient(
             self._start_color,
             self._end_color,
             (0, 0),
             bottom_right,
             direction=self._direction,
-            tag=self._tag
+            tags=self._tag
         )
+        # FIXME: What if we want it on top :(
+        canvas.tag_lower(self._tag)
