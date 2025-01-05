@@ -1,3 +1,4 @@
+from grundy.nodes.move_history import MoveHistoryNode
 from .core import Engine
 from .core import Scene
 from .nodes import GradientNode, ParticlesNode, AtomsNode
@@ -20,6 +21,9 @@ class DemoScene(Scene):
 
         atoms = AtomsNode(self.engine)
         self.add_node(atoms)
+
+        move_history = MoveHistoryNode(self.engine)
+        self.add_node(move_history)
 
     def on_update(self, ct: float, dt: float) -> None:
         pass
@@ -47,12 +51,6 @@ def main() -> None:
     engine.scenes.register("empty", EmptyScene)
 
     engine.scenes.switch_to("demo")
-
-    id = 0
-    for pile in engine.logic.get_piles().values():
-        id = pile.id
-
-    engine.logic.make_move(id, 3)
 
     engine.run()
 

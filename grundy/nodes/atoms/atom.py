@@ -1,6 +1,5 @@
 from typing import List
 
-from ...core.logic import Pile
 from .orbit import Orbit
 from .utils import electrons_per_orbit, calculate_real_radius, NUCLEUS_RADIUS, ORBIT_DEFAULT_RADIUS, ORBIT_RADIUS_INCREMENT
 
@@ -15,6 +14,8 @@ class Atom:
         self.size: int = pile_size
         self.pile_id = pile_id
         self.layers = electrons_per_orbit(self.size)
+        self.layers_quantity = len(self.layers)
+        self.real_radius = calculate_real_radius(self.layers_quantity)
 
         self._orbits: List[Orbit] = []
 
@@ -38,6 +39,14 @@ class Atom:
             start_color="#000000",
             end_color="#FFFFFF",
             steps=10,
+            tags=self._tag
+        )
+
+        canvas.create_text(
+            self.x, self.y,
+            text=self.size,
+            font=("Arial", 10, "bold"),
+            fill="red",
             tags=self._tag
         )
 

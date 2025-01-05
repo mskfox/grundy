@@ -26,7 +26,7 @@ class ParticlesNode(Node):
 
         # Particle state array [x, y, speed, radius, intensity]
         self._particles: Optional[np.ndarray] = None
-        self._ovals: List[int] = []  # Store canvas oval IDs
+        self._ovals: List[int] = [] 
 
     def _initialize_particles(self) -> None:
         """

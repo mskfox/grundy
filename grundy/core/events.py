@@ -1,9 +1,6 @@
 from enum import Enum, auto
 from typing import Callable, Dict, List, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from ..core.engine import Engine
-
 
 class EventType(Enum):
     WINDOW_RESIZE = auto()

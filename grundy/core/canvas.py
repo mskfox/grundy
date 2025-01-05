@@ -67,7 +67,6 @@ class Canvas(tk.Canvas):
         start_rgb = parse_color(start_color)
         end_rgb = parse_color(end_color)
 
-        # Calculate step size for each circle in the gradient
         step_radius = radius / steps
 
         for i in range(steps):
@@ -78,10 +77,7 @@ class Canvas(tk.Canvas):
             )
             color = rgb_to_hex(current_rgb)
 
-            # Calculate the current circle's radius
             current_radius = radius - (step_radius * i)
-
-            # Create the circle
             self.create_circle(x, y, current_radius, fill=color, outline="", tags=tags)
 
     def create_circle(

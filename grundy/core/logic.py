@@ -35,7 +35,7 @@ class Pile:
 
 class Logic:
     initial_pile: int
-    piles: Dict[int, Pile]  # Mapping from pile id to Pile object
+    piles: Dict[int, Pile]
     current_player: int
 
     def __init__(self, engine: 'Engine', initial_pile=10):
@@ -70,7 +70,7 @@ class Logic:
         self.piles = {}
 
         for _ in range(26):
-            random_size = random.randint(1, 20)  # Random size for each pile, adjust the range as needed
+            random_size = random.randint(1, 20)
             pile = Pile(random_size)
             self.piles[pile.id] = pile
 
@@ -104,7 +104,7 @@ class Logic:
 
         self._switch_player()
 
-        self.engine.events.emit(EventType.MOVE_MADE, pile_id, position)
+        self.engine.events.emit(EventType.MOVE_MADE, pile.size, new_size1, new_size2)
         if self.is_game_over():
             self.engine.events.emit(EventType.GAME_OVER)
 

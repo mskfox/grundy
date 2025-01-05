@@ -24,6 +24,7 @@ def parse_color(color: ColorValue) -> Tuple[int, int, int]:
         raise ValueError(f"Invalid color format: {color}")
 
     if color == "":
+        # FIXME: Typing issue
         return ""
 
     # Strip whitespace and convert to lowercase

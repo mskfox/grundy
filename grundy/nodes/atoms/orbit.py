@@ -52,7 +52,7 @@ class Orbit:
             y = self.nucleus_y + self.radius * math.sin(angle)
 
             electron_id = canvas.create_circle(
-                x, y, ELECTRON_RADIUS,  # Assuming a radius of 3 for the electron
+                x, y, ELECTRON_RADIUS,
                 fill="red",
                 outline="black",
                 tags=self._tag

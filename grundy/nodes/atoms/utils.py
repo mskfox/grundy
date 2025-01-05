@@ -3,9 +3,9 @@ import random
 
 from typing import List
 
-NUCLEUS_RADIUS = 10
+NUCLEUS_RADIUS = 16
 ELECTRON_RADIUS = 2
-ORBIT_DEFAULT_RADIUS = 20
+ORBIT_DEFAULT_RADIUS = 26
 ORBIT_RADIUS_INCREMENT = 10
 ATOM_MIN_DISTANCE = 0
 
@@ -17,7 +17,7 @@ def calculate_real_radius(layers: int):
 def atoms_overlap(atom1, x, y, radius):
     x1, y1 = atom1.x, atom1.y
     x2, y2 = x, y
-    min_distance = calculate_real_radius(len(atom1.layers)) + radius + ATOM_MIN_DISTANCE
+    min_distance = calculate_real_radius(atom1.layers_quantity) + radius + ATOM_MIN_DISTANCE
     distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
     return distance < min_distance
@@ -28,7 +28,7 @@ def place_single_atom(x1, y1, x2, y2, existing_atoms, max_attempts=300):
     Try to place a single atom within the rectangle defined by (x1, y1) as the top-left
     and (x2, y2) as the bottom-right corners, avoiding overlap with existing atoms.
 
-    Returns the (x, y) position of the atom if successful, or None if placement fails.
+    Returns the (True, x, y) position of the atom if successful, or (False, 0, 0) if placement fails.
     """
     attempts = 0
 
@@ -44,12 +44,24 @@ def place_single_atom(x1, y1, x2, y2, existing_atoms, max_attempts=300):
                 break
 
         if not overlap:
-            return x, y
+            return True, x, y
 
         attempts += 1
 
     print("Failed to find a position for an atom.")
-    return None, None
+    return False, 0, 0
+
+
+def pick_atom_at(atoms, x, y):
+    """
+    Loops through the atoms and checks if the provided position
+    is inside any of them.
+    """
+    for atom in atoms:
+        distance = ((x - atom.x) ** 2 + (y - atom.y) ** 2) ** 0.5
+        if distance <= NUCLEUS_RADIUS:
+            return atom
+    return None
 
 
 def electrons_per_orbit(total_electrons: int) -> List[int]:
