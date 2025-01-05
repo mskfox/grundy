@@ -35,13 +35,18 @@ class PlayScene(Scene):
         pass
 
 class GameOverScene(Scene):
-    def on_entry(self) -> None:
+    def __init__(self, engine):
+        super().__init__(engine)
+
         gradient = GradientNode(
             self.engine,
             start_color="#1A1A2E",
             end_color="#16213E"
         )
         self.add_node(gradient)
+
+    def on_entry(self) -> None:
+        pass
 
     def on_exit(self) -> None:
         pass
