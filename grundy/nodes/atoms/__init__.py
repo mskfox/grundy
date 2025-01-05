@@ -28,7 +28,6 @@ class AtomsNode(Node):
         self.engine.events.subscribe(EventType.WINDOW_RESIZE, self._on_resize)
         self.engine.events.subscribe(EventType.UPDATE, self._on_update)
 
-        self.engine.events.subscribe(EventType.GAME_OVER, lambda : print("GAME OVER"))
         self.engine.events.subscribe(EventType.GAME_RESET, self._on_game_reset)
 
         self.engine.events.subscribe(EventType.PILE_ADDED, self._on_pile_added)
