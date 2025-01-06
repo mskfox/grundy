@@ -17,10 +17,11 @@ class Canvas(tk.Canvas):
         top_left: Tuple[int, int],
         bottom_right: Tuple[int, int],
         direction: Literal['horizontal', 'vertical'] = "vertical",
-        tag: Optional[str] = None
+        tags: Optional[str] = None
     ) -> None:
         """
-        Create a gradient effect on the canvas
+        Create a gradient effect on the canvas.
+        Attention - Does not return the items ids.
         """
         start_rgb = parse_color(start_color)
         end_rgb = parse_color(end_color)
@@ -46,7 +47,54 @@ class Canvas(tk.Canvas):
                 y1 = top_left[1] + (height * i) // steps
                 y2 = top_left[1] + (height * (i + 1)) // steps
 
-            self.create_rectangle(x1, y1, x2, y2, fill=color, outline="", tags=tag)
+            self.create_rectangle(x1, y1, x2, y2, fill=color, outline="", tags=tags)
+
+    def create_gradient_circle(
+            self,
+            x: int,
+            y: int,
+            radius: int,
+            start_color: ColorValue,
+            end_color: ColorValue,
+            steps: int = 50,
+            tags: Optional[str] = None
+    ) -> None:
+        """
+        Create a gradient circle (concentric circles with gradient).
+        The gradient goes from the outer color (start_color) to the inner color (end_color).
+        Attention - Does not return the items ids.
+        """
+        start_rgb = parse_color(start_color)
+        end_rgb = parse_color(end_color)
+
+        step_radius = radius / steps
+
+        for i in range(steps):
+            t = i / (steps - 1)  # t goes from 0 to 1
+            current_rgb = tuple(
+                int(start + (end - start) * t)
+                for start, end in zip(start_rgb, end_rgb)
+            )
+            color = rgb_to_hex(current_rgb)
+
+            current_radius = radius - (step_radius * i)
+            self.create_circle(x, y, current_radius, fill=color, outline="", tags=tags)
+
+    def create_circle(
+            self,
+            x: int,
+            y: int,
+            radius: int,
+            fill: ColorValue = "",
+            outline: ColorValue = "",
+            tags: Optional[str] = None
+    ) -> int:
+        """
+        Create a circle on the canvas
+        """
+        color = "" if fill == "" else rgb_to_hex(parse_color(fill))
+        outline = "" if outline == "" else rgb_to_hex(parse_color(outline))
+        return self.create_oval(x - radius, y - radius, x + radius, y + radius, fill=color, outline=outline, tags=tags)
 
     def clear(self) -> None:
         """

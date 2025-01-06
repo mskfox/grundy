@@ -87,6 +87,8 @@ class SceneManager:
         if self._current_scene:
             self._current_scene._deactivate()
 
+        self.engine.canvas.clear()
+
         self._current_scene = self._scenes[name]
         self._current_scene._activate()
 

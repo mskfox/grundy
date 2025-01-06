@@ -25,9 +25,8 @@ class Viewport(tk.Tk):
         """
         Get the current window size
         """
-        # processes pending events to ensure an accurate size
+        # Processes pending events to ensure an accurate size
         self.update_idletasks()
-
         return self.winfo_width(), self.winfo_height()
 
     def _on_close(self) -> None:

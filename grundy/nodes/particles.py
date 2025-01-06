@@ -26,12 +26,14 @@ class ParticlesNode(Node):
 
         # Particle state array [x, y, speed, radius, intensity]
         self._particles: Optional[np.ndarray] = None
-        self._ovals: List[int] = []  # Store canvas oval IDs
+        self._ovals: List[int] = [] 
 
     def _initialize_particles(self) -> None:
         """
         Initialize or reinitialize the particle system
         """
+        self.engine.canvas.delete(self._tag)
+
         width, height = self.engine.viewport.get_size()
         num_particles = int(self._density * width * height)
 
@@ -74,6 +76,7 @@ class ParticlesNode(Node):
         self.engine.events.unsubscribe(EventType.UPDATE, self._on_update)
 
         self.engine.canvas.delete(self._tag)
+
         self._ovals = []
         self._particles = None
 

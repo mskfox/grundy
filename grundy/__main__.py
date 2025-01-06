@@ -1,11 +1,15 @@
-from .core import Engine
-from .core import Scene
-from .nodes import GradientNode, ParticlesNode
+from .nodes import MoveHistoryNode
+from .core.engine import Engine
+from .core.scene import Scene
+from .core.events import EventType
+from .nodes import GradientBackgroundNode, ParticlesNode, AtomsNode
 
 
-class DemoScene(Scene):
-    def on_entry(self) -> None:
-        gradient = GradientNode(
+class PlayScene(Scene):
+    def __init__(self, engine):
+        super().__init__(engine)
+
+        gradient = GradientBackgroundNode(
             self.engine,
             start_color="#1A1A2E",
             end_color="#16213E"
@@ -18,17 +22,30 @@ class DemoScene(Scene):
         )
         self.add_node(particles)
 
-    def on_update(self, ct: float, dt: float) -> None:
+        atoms = AtomsNode(self.engine)
+        self.add_node(atoms)
+
+        move_history = MoveHistoryNode(self.engine)
+        self.add_node(move_history)
+
+    def on_entry(self) -> None:
         pass
 
     def on_exit(self) -> None:
         pass
 
-class EmptyScene(Scene):
-    def on_entry(self) -> None:
-        pass
+class GameOverScene(Scene):
+    def __init__(self, engine):
+        super().__init__(engine)
 
-    def on_update(self, ct: float, dt: float) -> None:
+        gradient = GradientBackgroundNode(
+            self.engine,
+            start_color="#1A1A2E",
+            end_color="#16213E"
+        )
+        self.add_node(gradient)
+
+    def on_entry(self) -> None:
         pass
 
     def on_exit(self) -> None:
@@ -40,10 +57,11 @@ def main() -> None:
     engine.viewport.set_title("Grundy's Game")
     engine.viewport.set_geometry("800x600")
 
-    engine.scenes.register("demo", DemoScene)
-    engine.scenes.register("empty", EmptyScene)
+    engine.scenes.register("play", PlayScene)
+    engine.scenes.register("gameover", GameOverScene)
 
-    engine.scenes.switch_to("demo")
+    engine.scenes.switch_to("play")
+    engine.events.subscribe(EventType.GAME_OVER, lambda : engine.scenes.switch_to("gameover"))
 
     engine.run()
 

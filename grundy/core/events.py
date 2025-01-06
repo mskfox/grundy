@@ -1,9 +1,6 @@
 from enum import Enum, auto
 from typing import Callable, Dict, List, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from ..core.engine import Engine
-
 
 class EventType(Enum):
     WINDOW_RESIZE = auto()
@@ -13,6 +10,9 @@ class EventType(Enum):
     MOVE_MADE = auto()
     GAME_OVER = auto()
     GAME_RESET = auto()
+
+    PILE_ADDED = auto()
+    PILE_REMOVED = auto()
 
 
 class Events:

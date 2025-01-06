@@ -5,7 +5,7 @@ from ..core.node import Node
 from ..utils.colors import ColorValue
 
 
-class GradientNode(Node):
+class GradientBackgroundNode(Node):
     def __init__(
             self,
             engine,
@@ -44,12 +44,14 @@ class GradientNode(Node):
         """
         Draw or redraw the gradient
         """
-        self.engine.canvas.delete(self._tag)
-        self.engine.canvas.create_gradient(
+        canvas = self.engine.canvas
+        canvas.delete(self._tag)
+        canvas.create_gradient(
             self._start_color,
             self._end_color,
             (0, 0),
             bottom_right,
             direction=self._direction,
-            tag=self._tag
+            tags=self._tag
         )
+        canvas.tag_lower(self._tag)

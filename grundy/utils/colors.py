@@ -23,6 +23,10 @@ def parse_color(color: ColorValue) -> Tuple[int, int, int]:
     if not isinstance(color, str):
         raise ValueError(f"Invalid color format: {color}")
 
+    if color == "":
+        # FIXME: Typing issue
+        return ""
+
     # Strip whitespace and convert to lowercase
     color = color.strip().lower()
 
