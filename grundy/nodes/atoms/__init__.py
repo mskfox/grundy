@@ -2,7 +2,7 @@
 Atom simulation node for visualizing and interacting with atomic structures.
 """
 
-from typing import Dict, List, Optional
+from typing import List, Optional
 from dataclasses import dataclass
 
 from ...core.events import EventType
@@ -127,7 +127,6 @@ class AtomsNode(Node):
         piles = self.engine.logic.get_piles()
 
         for pile in piles.values():
-            print(self._viewport_bounds)
             success, x, y = place_single_atom(
                 self._viewport_bounds.x1,
                 self._viewport_bounds.y1,
@@ -180,7 +179,6 @@ class AtomsNode(Node):
         """
         self._selected_atom = pick_atom_at(self._atoms, event.x, event.y)
         if self._selected_atom:
-            print(f"Selected atom with size {self._selected_atom.size}")
             self._create_split_text()
 
     def _on_drag(self, event) -> None:

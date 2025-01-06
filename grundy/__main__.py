@@ -2,14 +2,14 @@ from .nodes import MoveHistoryNode
 from .core.engine import Engine
 from .core.scene import Scene
 from .core.events import EventType
-from .nodes import GradientNode, ParticlesNode, AtomsNode
+from .nodes import GradientBackgroundNode, ParticlesNode, AtomsNode
 
 
 class PlayScene(Scene):
     def __init__(self, engine):
         super().__init__(engine)
 
-        gradient = GradientNode(
+        gradient = GradientBackgroundNode(
             self.engine,
             start_color="#1A1A2E",
             end_color="#16213E"
@@ -38,7 +38,7 @@ class GameOverScene(Scene):
     def __init__(self, engine):
         super().__init__(engine)
 
-        gradient = GradientNode(
+        gradient = GradientBackgroundNode(
             self.engine,
             start_color="#1A1A2E",
             end_color="#16213E"

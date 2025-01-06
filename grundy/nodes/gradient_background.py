@@ -5,7 +5,7 @@ from ..core.node import Node
 from ..utils.colors import ColorValue
 
 
-class GradientNode(Node):
+class GradientBackgroundNode(Node):
     def __init__(
             self,
             engine,
@@ -54,5 +54,4 @@ class GradientNode(Node):
             direction=self._direction,
             tags=self._tag
         )
-        # FIXME: What if we want it on top :(
         canvas.tag_lower(self._tag)
