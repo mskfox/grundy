@@ -1,7 +1,16 @@
+"""
+Utility functions and constants for atom visualization.
+"""
+
 import math
 import random
 
-from typing import List
+from typing import List, Tuple, Optional
+from dataclasses import dataclass
+
+
+# Higher values equals to a faster rotation
+ELECTRON_SPEED_FACTOR = 6
 
 NUCLEUS_RADIUS = 16
 ELECTRON_RADIUS = 2
@@ -10,70 +19,136 @@ ORBIT_RADIUS_INCREMENT = 10
 ATOM_MIN_DISTANCE = 0
 
 
-def calculate_real_radius(layers: int):
+@dataclass
+class Point:
+    """
+    Represents a 2D point.
+    """
+    x: float
+    y: float
+
+    def distance_to(self, other: 'Point') -> float:
+        """
+        Calculate Euclidean distance to another point.
+        """
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
+
+
+@dataclass
+class Bounds:
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+
+
+def calculate_real_radius(layers: int) -> float:
+    """
+    Calculate the total radius of an atom including all electron layers.
+
+    Args:
+        layers: Number of electron layers
+
+    Returns:
+        Total radius of the atom
+    """
     return NUCLEUS_RADIUS + ORBIT_DEFAULT_RADIUS + layers * ORBIT_RADIUS_INCREMENT
 
 
-def atoms_overlap(atom1, x, y, radius):
-    x1, y1 = atom1.x, atom1.y
-    x2, y2 = x, y
+def atoms_overlap(atom1, x: int, y: int, radius: float) -> bool:
+    """
+    Check if two atoms would overlap at given positions.
+
+    Args:
+        atom1: First atom
+        x: X-coordinate of second atom
+        y: Y-coordinate of second atom
+        radius: Radius of second atom
+
+    Returns:
+        True if atoms would overlap, False otherwise
+    """
+    point1 = Point(atom1.x, atom1.y)
+    point2 = Point(x, y)
     min_distance = calculate_real_radius(atom1.layers_quantity) + radius + ATOM_MIN_DISTANCE
-    distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
-    return distance < min_distance
+    return point1.distance_to(point2) < min_distance
 
 
-def place_single_atom(x1, y1, x2, y2, existing_atoms, max_attempts=300):
+def place_single_atom(
+        x1: int,
+        y1: int,
+        x2: int,
+        y2: int,
+        existing_atoms: List,
+        max_attempts: int = 300
+) -> Tuple[bool, int, int]:
     """
-    Try to place a single atom within the rectangle defined by (x1, y1) as the top-left
-    and (x2, y2) as the bottom-right corners, avoiding overlap with existing atoms.
+    Try to place a single atom within a rectangular area.
 
-    Returns the (True, x, y) position of the atom if successful, or (False, 0, 0) if placement fails.
+    Args:
+        x1: Left boundary
+        y1: Top boundary
+        x2: Right boundary
+        y2: Bottom boundary
+        existing_atoms: List of existing atoms to avoid overlap
+        max_attempts: Maximum number of placement attempts
+
+    Returns:
+        Tuple of (success, x, y) where success is True if placement was successful
     """
-    attempts = 0
-
-    while attempts < max_attempts:
+    for _ in range(max_attempts):
         x = random.randint(x1, x2)
         y = random.randint(y1, y2)
 
-        overlap = False
-        for atom in existing_atoms:
-            # FIXME: fix real radius
-            if atoms_overlap(atom, x, y, calculate_real_radius(1)):
-                overlap = True
-                break
-
-        if not overlap:
+        if not any(atoms_overlap(atom, x, y, calculate_real_radius(1))
+                   for atom in existing_atoms):
             return True, x, y
-
-        attempts += 1
 
     print("Failed to find a position for an atom.")
     return False, 0, 0
 
 
-def pick_atom_at(atoms, x, y):
+def pick_atom_at(atoms: List, x: int, y: int) -> Optional:
     """
-    Loops through the atoms and checks if the provided position
-    is inside any of them.
+    Find an atom at the given coordinates.
+
+    Args:
+        atoms: List of atoms to search
+        x: X-coordinate
+        y: Y-coordinate
+
+    Returns:
+        The atom at the given position or None if not found
     """
+    point = Point(x, y)
+
     for atom in atoms:
-        distance = ((x - atom.x) ** 2 + (y - atom.y) ** 2) ** 0.5
-        if distance <= NUCLEUS_RADIUS:
+        if point.distance_to(Point(atom.x, atom.y)) <= NUCLEUS_RADIUS:
             return atom
+
     return None
 
 
 def electrons_per_orbit(total_electrons: int) -> List[int]:
+    """
+    Calculate electron distribution across orbits based on quantum mechanics.
+
+    Args:
+        total_electrons: Total number of electrons to distribute
+
+    Returns:
+        List of electron counts for each orbit
+    """
     orbits = []
-    n = 1
+    principal_quantum_number = 1
 
     while total_electrons > 0:
-        max_electrons = 2 * n ** 2
+        max_electrons = 2 * principal_quantum_number ** 2
         current_electrons = min(total_electrons, max_electrons)
         orbits.append(current_electrons)
 
         total_electrons -= current_electrons
-        n += 1
+        principal_quantum_number += 1
 
     return orbits
