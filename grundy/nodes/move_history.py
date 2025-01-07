@@ -2,16 +2,15 @@ from ..core.events import EventType
 from ..core.node import Node
 
 PADDING_BOTTOM = 20
+PADDING_LEFT = 20
 
 
 class MoveHistoryNode(Node):
-    def __init__(
-        self,
-        engine
-    ):
+    def __init__(self, engine):
         super().__init__(engine)
 
         self._text_item = None
+        self._move_history = []
 
     def on_activated(self) -> None:
         self.engine.events.subscribe(EventType.WINDOW_RESIZE, self._on_resize)
@@ -27,16 +26,24 @@ class MoveHistoryNode(Node):
         canvas = self.engine.canvas
         width, height = self.engine.viewport.get_size()
         self._text_item = canvas.create_text(
-            width // 2,
+            PADDING_LEFT,
             height - PADDING_BOTTOM,
             text="No move has been played yet.",
             fill="white",
             font=("Arial", 16),
-            anchor="s"
+            anchor="sw"
         )
 
-    def _on_move_made(self, old_size, new_size1, new_size2):
-        self.engine.canvas.itemconfig(self._text_item, text=f"Atom of size {old_size} got splitted into atoms of size {new_size1} and {new_size2}")
+    def _on_move_made(self, author, old_pile, new_pile1, new_pile2):
+        author_name = "Player" if author == 1 else "Computer"
+        move_text = f"{author_name}: {old_pile.size} → {new_pile1.size}, {new_pile2.size}"
+        self._move_history.append(move_text)
+
+        if len(self._move_history) > 3:
+            self._move_history.pop(0)
+
+        self.engine.canvas.itemconfig(self._text_item, text="\n".join(self._move_history))
 
     def _on_resize(self, width, height):
-        self.engine.canvas.coords(self._text_item, width // 2, height - PADDING_BOTTOM)
+        # Update text position on resize
+        self.engine.canvas.coords(self._text_item, PADDING_LEFT, height - PADDING_BOTTOM)

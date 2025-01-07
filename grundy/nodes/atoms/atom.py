@@ -6,7 +6,7 @@ from .utils import (
     electrons_per_orbit,
     calculate_real_radius,
     NUCLEUS_RADIUS,
-    ORBIT_DEFAULT_RADIUS,
+    ORBIT_FIRST_RADIUS_INCREMENT,
     ORBIT_RADIUS_INCREMENT,
 )
 
@@ -16,8 +16,8 @@ class AtomConfig:
     """
     Configuration for atom visualization.
     """
-    nucleus_color_start: str = "#000000"
-    nucleus_color_end: str = "#FFFFFF"
+    nucleus_outer_color: str = "#000000"
+    nucleus_inner_color: str = "#FFFFFF"
     nucleus_gradient_steps: int = 10
     font_family: str = "Arial"
     font_size: int = 10
@@ -102,8 +102,8 @@ class Atom:
             self.x,
             self.y,
             NUCLEUS_RADIUS,
-            start_color=self.config.nucleus_color_start,
-            end_color=self.config.nucleus_color_end,
+            start_color=self.config.nucleus_outer_color,
+            end_color=self.config.nucleus_inner_color,
             steps=self.config.nucleus_gradient_steps,
             tags=self._tag
         )
@@ -127,7 +127,7 @@ class Atom:
         Create and draw electron orbits.
         """
         for layer_index, electron_count in enumerate(self.layers):
-            radius = ORBIT_DEFAULT_RADIUS + ORBIT_RADIUS_INCREMENT * layer_index
+            radius = NUCLEUS_RADIUS + ORBIT_FIRST_RADIUS_INCREMENT + ORBIT_RADIUS_INCREMENT * layer_index
             orbit = Orbit(
                 self.engine,
                 self.x,

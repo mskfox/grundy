@@ -1,4 +1,6 @@
-from typing import Dict, List, TYPE_CHECKING
+import random
+
+from typing import Dict, TYPE_CHECKING
 
 from .events import EventType
 
@@ -47,9 +49,6 @@ class Logic:
     def get_piles(self) -> Dict[int, Pile]:
         return self.piles
 
-    def get_pile(self, pile_id: int) -> Pile:
-        return self.piles.get(pile_id)
-
     def reset(self):
         """
         Reset the game.
@@ -77,7 +76,7 @@ class Logic:
         self.current_player = 1
         self.engine.events.emit(EventType.GAME_RESET)
 
-    def make_move(self, pile_id: int, position: int) -> bool:
+    def _make_move(self, pile_id: int, position: int) -> bool:
         """
         Make a move by splitting a pile at the given index.
         :param pile_id: The index of the pile to split.
@@ -102,13 +101,42 @@ class Logic:
         self.engine.events.emit(EventType.PILE_ADDED, new_pile1.id, new_size1)
         self.engine.events.emit(EventType.PILE_ADDED, new_pile2.id, new_size2)
 
-        self._switch_player()
-
-        self.engine.events.emit(EventType.MOVE_MADE, pile.size, new_size1, new_size2)
+        self.engine.events.emit(EventType.MOVE_MADE, self.current_player, pile, new_pile1, new_pile2)
         if self.is_game_over():
-            self.engine.events.emit(EventType.GAME_OVER)
+            self.engine.events.emit(EventType.GAME_OVER, self.current_player)
 
+        self._switch_player()
         return True
+
+    def player_move(self, pile_id: int, position: int):
+        """
+        Handle the player's move.
+        :param pile_id: The index of the pile to split.
+        :param position: The position to split the pile.
+        """
+        if not self.is_player_turn():
+            return
+
+        self._make_move(pile_id, position)
+        self.computer_move()
+
+    def computer_move(self) -> None:
+        """
+        Handles the computer's move.
+        """
+        if self.is_player_turn():
+            return
+
+        splittable_piles = [pile for pile in self.piles.values() if pile.can_split()]
+        if not splittable_piles:
+            return
+
+        pile = random.choice(splittable_piles)
+
+        max_position = (pile.size // 2) - 1
+        position = random.randint(1, max(1, max_position))
+
+        self._make_move(pile.id, position)
 
     def _is_valid_move(self, pile_id: int, position: int) -> bool:
         """
@@ -129,7 +157,7 @@ class Logic:
 
         return new_size1 != new_size2
 
-    def _switch_player(self):
+    def _switch_player(self) -> None:
         """
         Switch the current player.
         """
@@ -141,3 +169,10 @@ class Logic:
         :return: Whether the game is over.
         """
         return not any(pile.can_split() for pile in self.piles.values())
+
+    def is_player_turn(self) -> bool:
+        """
+        Check if it is the computer's turn.
+        :return: Whether it is the computer's turn.
+        """
+        return self.current_player == 1

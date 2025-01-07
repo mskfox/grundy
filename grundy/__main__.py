@@ -61,7 +61,7 @@ def main() -> None:
     engine.scenes.register("gameover", GameOverScene)
 
     engine.scenes.switch_to("play")
-    engine.events.subscribe(EventType.GAME_OVER, lambda : engine.scenes.switch_to("gameover"))
+    engine.events.subscribe(EventType.GAME_OVER, lambda _: engine.scenes.switch_to("gameover"))
 
     engine.run()
 

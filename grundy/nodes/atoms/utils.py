@@ -14,9 +14,9 @@ ELECTRON_SPEED_FACTOR = 6
 
 NUCLEUS_RADIUS = 16
 ELECTRON_RADIUS = 2
-ORBIT_DEFAULT_RADIUS = 26
+ORBIT_FIRST_RADIUS_INCREMENT = 10
 ORBIT_RADIUS_INCREMENT = 10
-ATOM_MIN_DISTANCE = 0
+ATOM_MIN_DISTANCE = 6
 
 
 @dataclass
@@ -52,7 +52,7 @@ def calculate_real_radius(layers: int) -> float:
     Returns:
         Total radius of the atom
     """
-    return NUCLEUS_RADIUS + ORBIT_DEFAULT_RADIUS + layers * ORBIT_RADIUS_INCREMENT
+    return NUCLEUS_RADIUS + ORBIT_FIRST_RADIUS_INCREMENT + layers * ORBIT_RADIUS_INCREMENT
 
 
 def atoms_overlap(atom1, x: int, y: int, radius: float) -> bool:

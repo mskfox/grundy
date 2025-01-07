@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from ...core.events import EventType
 from ...core.node import Node
 from .atom import Atom
-from .utils import place_single_atom, pick_atom_at, Bounds
+from .utils import place_single_atom, pick_atom_at, Bounds, NUCLEUS_RADIUS
 
 
 @dataclass
@@ -150,25 +150,28 @@ class AtomsNode(Node):
             height - self.config.padding
         )
 
-
     def _calculate_split_pos(self, event_x: int, event_y: int, atom: Atom) -> int:
         """
-        Calculate the number of units to move based on drag distance.
-        Only allows split up to half the size minus one to prevent symetric
-        duplicates.
+        Calculate the split position based on drag distance.
+        Only allows split up to half the size to prevent symetric duplicates.
         """
         max_allowed = (atom.size + 1) // 2
-        distance = ((event_x - atom.x) ** 2 + (event_y - atom.y) ** 2) ** 0.5
 
-        distances = [
-            atom.x - self._viewport_bounds.x1,  # left
-            self._viewport_bounds.x2 - atom.x,  # right
-            atom.y - self._viewport_bounds.y1,  # top
-            self._viewport_bounds.y2 - atom.y   # bottom
-        ]
+        raw_distance = ((event_x - atom.x) ** 2 + (event_y - atom.y) ** 2) ** 0.5
+        adjusted_distance = max(0, raw_distance - NUCLEUS_RADIUS)
 
-        max_distance = max(distances)
-        scaled_pos = round(distance / max_distance * (max_allowed - 1)) + 1
+        viewport = self._viewport_bounds
+        max_distance = max(
+            atom.x - viewport.x1,
+            viewport.x2 - atom.x,
+            atom.y - viewport.y1,
+            viewport.y2 - atom.y
+        )
+
+        MAX_PIXEL_PER_UNIT = 40
+        effective_max_distance = min(max_distance, max_allowed * MAX_PIXEL_PER_UNIT)
+
+        scaled_pos = round(adjusted_distance / effective_max_distance * (max_allowed - 1))
         capped_pos = min(scaled_pos, max_allowed - 1)
 
         return capped_pos
@@ -195,7 +198,7 @@ class AtomsNode(Node):
         """
         if self._selected_atom:
             units = self._calculate_split_pos(event.x, event.y, self._selected_atom)
-            self.engine.logic.make_move(self._selected_atom.pile_id, units)
+            self.engine.logic.player_move(self._selected_atom.pile_id, units)
             self._remove_split_text()
             self._selected_atom = None
 

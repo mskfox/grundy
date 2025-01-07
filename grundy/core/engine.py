@@ -32,7 +32,7 @@ class Engine:
         self.canvas = Canvas(self.viewport)
         self.events = Events()
         self.scenes = SceneManager(self)
-        self.logic = Logic(self, 10)
+        self.logic = Logic(self, 16)
 
         self._running = False
         self._last_frame_time: Optional[float] = None
