@@ -3,10 +3,6 @@ from dataclasses import dataclass
 from ..core.events import EventType
 from ..core.node import Node
 
-PADDING_BOTTOM = 20
-PADDING_LEFT = 20
-MAX_HISTORY_CAPACITY = 5
-
 
 @dataclass
 class NodeConfig:
@@ -15,7 +11,7 @@ class NodeConfig:
     """
     padding_bottom: int = 20
     padding_left: int = 20
-    max_history_capacity: int = 5
+    max_history_capacity: int = 3
 
 
 class MoveHistoryNode(Node):
