@@ -1,13 +1,27 @@
+from dataclasses import dataclass
+
 from ..core.events import EventType
 from ..core.node import Node
 
 PADDING_BOTTOM = 20
 PADDING_LEFT = 20
+MAX_HISTORY_CAPACITY = 5
+
+
+@dataclass
+class NodeConfig:
+    """
+    Configuration for the MoveHistory node.
+    """
+    padding_bottom: int = 20
+    padding_left: int = 20
+    max_history_capacity: int = 5
 
 
 class MoveHistoryNode(Node):
     def __init__(self, engine):
         super().__init__(engine)
+        self.config = NodeConfig()
 
         self._text_item = None
         self._move_history = []
@@ -26,8 +40,8 @@ class MoveHistoryNode(Node):
         canvas = self.engine.canvas
         width, height = self.engine.viewport.get_size()
         self._text_item = canvas.create_text(
-            PADDING_LEFT,
-            height - PADDING_BOTTOM,
+            self.config.padding_left,
+            height - self.config.padding_bottom,
             text="No move has been played yet.",
             fill="white",
             font=("Arial", 16),
@@ -35,15 +49,15 @@ class MoveHistoryNode(Node):
         )
 
     def _on_move_made(self, author, old_pile, new_pile1, new_pile2):
-        author_name = "Player" if author == 1 else "Computer"
+        author_name = "You" if author == 1 else "Him"
         move_text = f"{author_name}: {old_pile.size} → {new_pile1.size}, {new_pile2.size}"
         self._move_history.append(move_text)
 
-        if len(self._move_history) > 3:
+        if len(self._move_history) > self.config.max_history_capacity:
             self._move_history.pop(0)
 
         self.engine.canvas.itemconfig(self._text_item, text="\n".join(self._move_history))
 
-    def _on_resize(self, width, height):
-        # Update text position on resize
-        self.engine.canvas.coords(self._text_item, PADDING_LEFT, height - PADDING_BOTTOM)
+    def _on_resize(self, _, height):
+        cfg = self.config
+        self.engine.canvas.coords(self._text_item, cfg.padding_left, height - cfg.padding_bottom)
