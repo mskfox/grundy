@@ -60,22 +60,6 @@ class Logic:
         self.current_player = 1
         self.engine.events.emit(EventType.GAME_RESET)
 
-    def _abusive_reset(self):
-        """
-        Reset the game by creating 20 random piles.
-        For testing purposes only.
-        """
-        import random
-        self.piles = {}
-
-        for _ in range(26):
-            random_size = random.randint(1, 20)
-            pile = Pile(random_size)
-            self.piles[pile.id] = pile
-
-        self.current_player = 1
-        self.engine.events.emit(EventType.GAME_RESET)
-
     def _make_move(self, pile_id: int, position: int) -> bool:
         """
         Make a move by splitting a pile at the given index.
