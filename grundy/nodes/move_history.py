@@ -23,6 +23,8 @@ class MoveHistoryNode(Node):
         self._move_history = []
 
     def on_activated(self) -> None:
+        self._move_history = []
+
         self.engine.events.subscribe(EventType.WINDOW_RESIZE, self._on_resize)
         self.engine.events.subscribe(EventType.MOVE_MADE, self._on_move_made)
         self._draw_text()

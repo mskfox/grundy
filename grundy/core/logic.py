@@ -38,7 +38,9 @@ class Pile:
 class Logic:
     initial_pile: int
     piles: Dict[int, Pile]
+
     current_player: int
+    last_winner: int
 
     def __init__(self, engine: 'Engine', initial_pile=10):
         self.engine = engine
@@ -87,7 +89,8 @@ class Logic:
 
         self.engine.events.emit(EventType.MOVE_MADE, self.current_player, pile, new_pile1, new_pile2)
         if self.is_game_over():
-            self.engine.events.emit(EventType.GAME_OVER, self.current_player)
+            self.last_winner = self.current_player
+            self.engine.events.emit(EventType.GAME_OVER, self.last_winner)
 
         self._switch_player()
         return True

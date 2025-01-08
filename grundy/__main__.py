@@ -3,6 +3,7 @@ from .core.engine import Engine
 from .core.scene import Scene
 from .core.events import EventType
 from .nodes import GradientBackgroundNode, ParticlesNode, AtomsNode
+from .nodes.game_over import GameOverNode
 
 
 class PlayScene(Scene):
@@ -40,10 +41,13 @@ class GameOverScene(Scene):
 
         gradient = GradientBackgroundNode(
             self.engine,
-            start_color="#1A1A2E",
-            end_color="#16213E"
+            start_color="#FF4E50",
+            end_color="#414345"
         )
         self.add_node(gradient)
+
+        game_over = GameOverNode(self.engine)
+        self.add_node(game_over)
 
     def on_entry(self) -> None:
         pass
