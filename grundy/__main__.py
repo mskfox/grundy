@@ -18,7 +18,7 @@ class PlayScene(Scene):
 
         particles = ParticlesNode(
             self.engine,
-            0.000025
+            0.000035
         )
         self.add_node(particles)
 
