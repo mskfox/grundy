@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from ...core.events import EventType
 from ...core.node import Node
+from ...utils.geom import Bounds
 from .atom import Atom
 from .utils import place_single_atom, pick_atom_at, electrons_per_orbit, Bounds, NUCLEUS_RADIUS
 from .warning import Warning

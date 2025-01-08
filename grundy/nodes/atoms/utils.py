@@ -2,11 +2,11 @@
 Utility functions and constants for atom visualization.
 """
 
-import math
 import random
 
 from typing import List, Tuple, Optional
-from dataclasses import dataclass
+
+from ...utils.geom import Point, Bounds
 
 
 # Higher values equals to a faster rotation
@@ -17,29 +17,6 @@ ELECTRON_RADIUS = 2
 ORBIT_FIRST_RADIUS_INCREMENT = 10
 ORBIT_RADIUS_INCREMENT = 10
 ATOM_MIN_DISTANCE = 6
-
-
-@dataclass
-class Point:
-    """
-    Represents a 2D point.
-    """
-    x: float
-    y: float
-
-    def distance_to(self, other: 'Point') -> float:
-        """
-        Calculate Euclidean distance to another point.
-        """
-        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
-
-
-@dataclass
-class Bounds:
-    x1: int
-    y1: int
-    x2: int
-    y2: int
 
 
 def calculate_real_radius(layers: int) -> float:
