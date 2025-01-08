@@ -8,13 +8,14 @@ from dataclasses import dataclass
 from ...core.events import EventType
 from ...core.node import Node
 from .atom import Atom
-from .utils import place_single_atom, pick_atom_at, Bounds, NUCLEUS_RADIUS
+from .utils import place_single_atom, pick_atom_at, electrons_per_orbit, Bounds, NUCLEUS_RADIUS
+from .warning import Warning
 
 
 @dataclass
 class NodeConfig:
     """
-    Configuration for the viewport layout.
+    Configuration for the Atoms node.
     """
     padding: int = 100
     split_text_offset: int = 30  # Pixels above the atom
@@ -39,6 +40,8 @@ class AtomsNode(Node):
         self._selected_atom: Optional[Atom] = None
         self._viewport_bounds = self._calculate_viewport_bounds()
         self._split_text_id: Optional[int] = None
+
+        self._warning = Warning(self.engine)
 
     def on_activated(self) -> None:
         """
@@ -126,17 +129,23 @@ class AtomsNode(Node):
         self._cleanup_atoms()
         piles = self.engine.logic.get_piles()
 
+        fully_successful = True
         for pile in piles.values():
+            layers_quantity, _ = electrons_per_orbit(pile.size)
             success, x, y = place_single_atom(
-                self._viewport_bounds.x1,
-                self._viewport_bounds.y1,
-                self._viewport_bounds.x2,
-                self._viewport_bounds.y2,
-                self._atoms
+                self._viewport_bounds,
+                self._atoms,
+                layers_quantity
             )
 
             if success:
                 self.add_atom(x, y, pile.id, pile.size)
+            else:
+                self._warning.start_warning()
+                fully_successful = False
+
+        if fully_successful:
+            self._warning.stop_warning()
 
     def _calculate_viewport_bounds(self) -> Bounds:
         """
@@ -246,6 +255,7 @@ class AtomsNode(Node):
         """
         self._viewport_bounds = self._calculate_viewport_bounds()
         self._setup_atoms()
+        self._warning.render()
 
     def _on_update(self, current_time: float, delta_time: float) -> None:
         """
@@ -264,15 +274,17 @@ class AtomsNode(Node):
         """
         Handle new pile addition events.
         """
+        layers_quantity, _ = electrons_per_orbit(pile_size)
         success, x, y = place_single_atom(
-            self._viewport_bounds.x1,
-            self._viewport_bounds.y1,
-            self._viewport_bounds.x2,
-            self._viewport_bounds.y2,
-            self._atoms
+            self._viewport_bounds,
+            self._atoms,
+            layers_quantity
         )
+
         if success:
             self.add_atom(x, y, pile_id, pile_size)
+        else:
+            self._warning.start_warning()
 
     def _on_pile_removed(self, pile_id: int) -> None:
         """

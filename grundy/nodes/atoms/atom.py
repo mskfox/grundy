@@ -59,7 +59,7 @@ class Atom:
         self.pile_id = pile_id
 
         # Calculate electron distribution and dimensions
-        self.layers = electrons_per_orbit(self.size)
+        _, self.layers = electrons_per_orbit(self.size)
         self.layers_quantity = len(self.layers)
         self.real_radius = calculate_real_radius(self.layers_quantity)
 
