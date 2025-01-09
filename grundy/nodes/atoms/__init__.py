@@ -10,7 +10,7 @@ from ...core.node import Node
 from ...utils.geom import Bounds
 from .atom import Atom
 from .utils import place_single_atom, pick_atom_at, electrons_per_orbit, Bounds, NUCLEUS_RADIUS
-from .warning import Warning
+from .warning import AtomWarning
 
 
 @dataclass
@@ -29,7 +29,7 @@ class AtomsNode(Node):
     Node for managing atomic visualization and interaction.
     """
 
-    def __init__(self, engine):
+    def __init__(self, engine) -> None:
         """
         Initialize the atoms visualization node.
         """
@@ -42,7 +42,7 @@ class AtomsNode(Node):
         self._viewport_bounds = self._calculate_viewport_bounds()
         self._split_text_id: Optional[int] = None
 
-        self._warning = Warning(self.engine)
+        self._warning = AtomWarning(self.engine)
 
     def on_activated(self) -> None:
         """

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Literal
 
 from ..core.events import EventType
 from ..core.node import Node
@@ -11,14 +11,14 @@ class GradientBackgroundNode(Node):
             engine,
             start_color: ColorValue = "#000000",
             end_color: ColorValue = "#FFFFFF",
-            direction: str = "vertical"
+            direction: Literal['horizontal', 'vertical'] = "vertical"
     ):
         super().__init__(engine)
         self._tag = f"id-{id(self)}"
 
         self._start_color: ColorValue = start_color
         self._end_color: ColorValue = end_color
-        self._direction: str = direction
+        self._direction: Literal['horizontal', 'vertical'] = direction
 
     def on_activated(self) -> None:
         """

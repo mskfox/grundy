@@ -27,7 +27,7 @@ def _setup_on_resize_event(engine: 'Engine'):
 
 
 class Engine:
-    def __init__(self):
+    def __init__(self) -> None:
         self.viewport = Viewport()
         self.canvas = Canvas(self.viewport)
         self.events = Events()

@@ -9,18 +9,6 @@ class Viewport(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self._running = True
 
-    def set_title(self, title: str) -> None:
-        """
-        Set the window title
-        """
-        self.title(title)
-
-    def set_geometry(self, geometry: str) -> None:
-        """
-        Set the window geometry
-        """
-        self.geometry(geometry)
-
     def get_size(self) -> Tuple[int, int]:
         """
         Get the current window size

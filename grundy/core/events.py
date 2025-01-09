@@ -16,7 +16,7 @@ class EventType(Enum):
 
 
 class Events:
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners: Dict[EventType, List[Callable]] = {}
 
     def subscribe(self, event_type: EventType, callback: Callable):

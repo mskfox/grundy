@@ -1,6 +1,7 @@
+import math
+
 from dataclasses import dataclass
 from enum import Enum
-import math
 from typing import Optional, Tuple, Callable
 
 from ..core.node import Node
@@ -14,8 +15,8 @@ class AnimationConfig:
     Configuration for animation properties.
     """
     FLASH_SPEED: float = 2 * math.pi
-    WHITE: ColorValue = (255, 255, 255)
-    BLACK: ColorValue = (0, 0, 0)
+    WHITE: Tuple[int, int, int] = (255, 255, 255)
+    BLACK: Tuple[int, int, int] = (0, 0, 0)
 
 @dataclass
 class TextStyle:

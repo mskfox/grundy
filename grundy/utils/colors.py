@@ -1,11 +1,13 @@
 import re
 
-from typing import Tuple, Union
+from typing import Tuple, Union, cast
 
-ColorValue = Union[str, Tuple[int, int, int]]
+RGBColor = Tuple[int, int, int]
+ColorValue = Union[str, RGBColor]
+ParsedColor = Union[str, RGBColor]
 
 
-def parse_color(color: ColorValue) -> Tuple[int, int, int]:
+def parse_color(color: ColorValue) -> ParsedColor:
     """
     Parse different color formats into RGB tuple.
 
@@ -24,7 +26,6 @@ def parse_color(color: ColorValue) -> Tuple[int, int, int]:
         raise ValueError(f"Invalid color format: {color}")
 
     if color == "":
-        # FIXME: Typing issue
         return ""
 
     # Strip whitespace and convert to lowercase
@@ -35,12 +36,14 @@ def parse_color(color: ColorValue) -> Tuple[int, int, int]:
         color = color.lstrip('#')
         if len(color) == 3:  # Handle #RGB format
             color = ''.join(c * 2 for c in color)
-        return tuple(int(color[i:i+2], 16) for i in (0, 2, 4))
+        rgb_tuple = tuple(int(color[i:i+2], 16) for i in (0, 2, 4))
+        return cast(RGBColor, rgb_tuple)
 
     # Handle rgb format
     rgb_match = re.match(r'rgb\((\d+),\s*(\d+),\s*(\d+)\)', color)
     if rgb_match:
-        return tuple(int(v) for v in rgb_match.groups())
+        rgb_tuple = tuple(int(v) for v in rgb_match.groups())
+        return cast(RGBColor, rgb_tuple)
 
     # Handle named colors
     named_colors = {
@@ -59,8 +62,10 @@ def parse_color(color: ColorValue) -> Tuple[int, int, int]:
 
     raise ValueError(f"Invalid color format: {color}")
 
-def rgb_to_hex(rgb: Tuple[int, int, int]) -> str:
+def rgb_to_hex(color: ParsedColor) -> str:
     """
     Convert RGB tuple to hex color string
     """
-    return f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}"
+    if color == "":
+        return ""
+    return f"#{color[0]:02x}{color[1]:02x}{color[2]:02x}"

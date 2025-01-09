@@ -1,8 +1,8 @@
 import tkinter as tk
 
-from typing import Tuple, Literal, Optional
+from typing import Tuple, Literal, Optional, cast
 
-from ..utils.colors import parse_color, rgb_to_hex, ColorValue
+from ..utils.colors import parse_color, rgb_to_hex, ColorValue, RGBColor
 
 
 class Canvas(tk.Canvas):
@@ -17,7 +17,7 @@ class Canvas(tk.Canvas):
         top_left: Tuple[int, int],
         bottom_right: Tuple[int, int],
         direction: Literal['horizontal', 'vertical'] = "vertical",
-        tags: Optional[str] = None
+        tags: str = ""
     ) -> None:
         """
         Create a gradient effect on the canvas.
@@ -32,10 +32,10 @@ class Canvas(tk.Canvas):
 
         for i in range(steps):
             t = i / steps
-            current_rgb = tuple(
-                int(start + (end - start) * t)
-                for start, end in zip(start_rgb, end_rgb)
-            )
+            current_rgb = cast(RGBColor, tuple(
+               int(start + (end - start) * t)
+               for start, end in zip(start_rgb, end_rgb)
+            ))
             color = rgb_to_hex(current_rgb)
 
             if direction == "horizontal":
@@ -57,7 +57,7 @@ class Canvas(tk.Canvas):
             start_color: ColorValue,
             end_color: ColorValue,
             steps: int = 50,
-            tags: Optional[str] = None
+            tags: str = ""
     ) -> None:
         """
         Create a gradient circle (concentric circles with gradient).
@@ -67,14 +67,14 @@ class Canvas(tk.Canvas):
         start_rgb = parse_color(start_color)
         end_rgb = parse_color(end_color)
 
-        step_radius = radius / steps
+        step_radius = radius // steps
 
         for i in range(steps):
             t = i / (steps - 1)  # t goes from 0 to 1
-            current_rgb = tuple(
-                int(start + (end - start) * t)
-                for start, end in zip(start_rgb, end_rgb)
-            )
+            current_rgb = cast(RGBColor, tuple(
+               int(start + (end - start) * t)
+               for start, end in zip(start_rgb, end_rgb)
+            ))
             color = rgb_to_hex(current_rgb)
 
             current_radius = radius - (step_radius * i)
@@ -87,7 +87,7 @@ class Canvas(tk.Canvas):
             radius: int,
             fill: ColorValue = "",
             outline: ColorValue = "",
-            tags: Optional[str] = None
+            tags: str = ""
     ) -> int:
         """
         Create a circle on the canvas

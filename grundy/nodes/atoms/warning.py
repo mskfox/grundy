@@ -1,8 +1,8 @@
 from typing import Optional
-import math
 
-class Warning:
-    def __init__(self, engine):
+
+class AtomWarning:
+    def __init__(self, engine) -> None:
         self.engine = engine
         self.is_warning = False
         self.warning_text = "Failed to place all atoms!"
@@ -16,7 +16,7 @@ class Warning:
         self._text_id: Optional[int] = None
         self._bg_id: Optional[int] = None
 
-    def start_warning(self):
+    def start_warning(self) -> None:
         """
         Start displaying a warning message.
         """
@@ -43,7 +43,7 @@ class Warning:
 
         self.render()
 
-    def stop_warning(self):
+    def stop_warning(self) -> None:
         """Stop and remove the warning display."""
         if not self.is_warning:
             return
@@ -53,8 +53,10 @@ class Warning:
         self._text_id = None
         self._bg_id = None
 
-    def render(self):
-        """Update the warning position based on viewport size."""
+    def render(self) -> None:
+        """
+        Update the warning position based on viewport size.
+        """
         if not self.is_warning:
             return
 

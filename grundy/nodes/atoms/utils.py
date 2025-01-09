@@ -4,9 +4,12 @@ Utility functions and constants for atom visualization.
 
 import random
 
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, TYPE_CHECKING
 
 from ...utils.geom import Point, Bounds
+
+if TYPE_CHECKING:
+    from .atom import Atom
 
 
 # Higher values equals to a faster rotation
@@ -84,7 +87,7 @@ def place_single_atom(
     return False, 0, 0
 
 
-def pick_atom_at(atoms: List, x: int, y: int) -> Optional:
+def pick_atom_at(atoms: List, x: int, y: int) -> Optional['Atom']:
     """
     Find an atom at the given coordinates.
 
