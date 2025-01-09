@@ -17,7 +17,7 @@ class AtomConfig:
     Configuration for atom visualization.
     """
     nucleus_outer_color: str = "#000000"
-    nucleus_inner_color: str = "#FFFFFF"
+    nucleus_inner_color: str = "#B0B0B0"
     nucleus_gradient_steps: int = 10
     font_family: str = "Arial"
     font_size: int = 10
