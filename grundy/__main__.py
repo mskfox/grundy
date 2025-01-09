@@ -1,9 +1,13 @@
+import os
+
 from .nodes import MoveHistoryNode
 from .core.engine import Engine
 from .core.scene import Scene
 from .core.events import EventType
 from .nodes import GradientBackgroundNode, ParticlesNode, AtomsNode
 from .nodes.game_over import GameOverNode
+
+ICON_PATH = os.path.join(os.path.dirname(__file__), "assets", "atom.ico")
 
 
 class PlayScene(Scene):
@@ -58,8 +62,9 @@ class GameOverScene(Scene):
 
 def main() -> None:
     engine = Engine()
-    engine.viewport.set_title("Grundy's Game")
-    engine.viewport.set_geometry("800x600")
+    engine.viewport.title("Grundy's Game")
+    engine.viewport.geometry("800x600")
+    engine.viewport.iconbitmap(ICON_PATH)
 
     engine.scenes.register("play", PlayScene)
     engine.scenes.register("gameover", GameOverScene)
