@@ -9,7 +9,7 @@ from ...core.events import EventType
 from ...core.node import Node
 from ...utils.geom import Bounds
 from .atom import Atom
-from .utils import place_single_atom, pick_atom_at, electrons_per_orbit, Bounds, NUCLEUS_RADIUS
+from .utils import place_single_atom, pick_atom_at, calculate_electrons_distribution, Bounds, NUCLEUS_RADIUS
 from .warning import AtomWarning
 
 
@@ -132,7 +132,7 @@ class AtomsNode(Node):
 
         fully_successful = True
         for pile in piles.values():
-            layers_quantity, _ = electrons_per_orbit(pile.size)
+            layers_quantity, _ = calculate_electrons_distribution(pile.size)
             success, x, y = place_single_atom(
                 self._viewport_bounds,
                 self._atoms,
@@ -275,7 +275,7 @@ class AtomsNode(Node):
         """
         Handle new pile addition events.
         """
-        layers_quantity, _ = electrons_per_orbit(pile_size)
+        layers_quantity, _ = calculate_electrons_distribution(pile_size)
         success, x, y = place_single_atom(
             self._viewport_bounds,
             self._atoms,

@@ -108,7 +108,7 @@ def pick_atom_at(atoms: List, x: int, y: int) -> Optional['Atom']:
     return None
 
 
-def electrons_per_orbit(total_electrons: int) -> Tuple[int, List[int]]:
+def calculate_electrons_distribution(total_electrons: int) -> Tuple[int, List[int]]:
     """
     Calculate electron distribution across orbits based on quantum mechanics.
 
@@ -124,10 +124,10 @@ def electrons_per_orbit(total_electrons: int) -> Tuple[int, List[int]]:
 
     while total_electrons > 0:
         max_electrons = 2 * principal_quantum_number ** 2
-        current_electrons = min(total_electrons, max_electrons)
-        orbits.append(current_electrons)
+        current_layer_electrons = min(total_electrons, max_electrons)
+        orbits.append(current_layer_electrons)
 
-        total_electrons -= current_electrons
+        total_electrons -= current_layer_electrons
         principal_quantum_number += 1
 
     total_layers = len(orbits)

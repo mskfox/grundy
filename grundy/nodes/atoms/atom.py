@@ -3,7 +3,7 @@ from typing import List
 
 from .orbit import Orbit
 from .utils import (
-    electrons_per_orbit,
+    calculate_electrons_distribution,
     calculate_real_radius,
     NUCLEUS_RADIUS,
     ORBIT_FIRST_RADIUS_INCREMENT,
@@ -59,7 +59,7 @@ class Atom:
         self.pile_id = pile_id
 
         # Calculate electron distribution and dimensions
-        _, self.layers = electrons_per_orbit(self.size)
+        _, self.layers = calculate_electrons_distribution(self.size)
         self.layers_quantity = len(self.layers)
         self.real_radius = calculate_real_radius(self.layers_quantity)
 
