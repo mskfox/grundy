@@ -1,5 +1,6 @@
 import os
 
+from grundy.nodes.click_play import ClickPlayNode
 from .core.engine import Engine
 from .core.events import EventType
 from .scenes.play import PlayScene
@@ -14,10 +15,11 @@ def main() -> None:
     engine.viewport.geometry("800x600")
     engine.viewport.iconbitmap(ICON_PATH)
 
+    engine.scenes.register("menu", ClickPlayNode)
     engine.scenes.register("play", PlayScene)
     engine.scenes.register("gameover", GameOverScene)
 
-    engine.scenes.switch_to("play")
+    engine.scenes.switch_to("menu")
     engine.events.subscribe(EventType.GAME_OVER, lambda _: engine.scenes.switch_to("gameover"))
 
     engine.run()

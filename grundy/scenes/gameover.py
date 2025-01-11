@@ -1,6 +1,7 @@
 from ..core.scene import Scene
 from ..nodes.gradient_background import GradientBackgroundNode
 from ..nodes.game_over import GameOverNode
+from ..nodes.click_play import ClickPlayNode
 
 
 class GameOverScene(Scene):
@@ -16,6 +17,9 @@ class GameOverScene(Scene):
 
         game_over = GameOverNode(self.engine)
         self.add_node(game_over)
+
+        click_play = ClickPlayNode(self.engine)
+        self.add_node(click_play)
 
     def on_entry(self) -> None:
         pass

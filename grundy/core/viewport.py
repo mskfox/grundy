@@ -17,6 +17,16 @@ class Viewport(tk.Tk):
         self.update_idletasks()
         return self.winfo_width(), self.winfo_height()
 
+    def get_center(self) -> Tuple[int, int]:
+        """
+        Calculate the screen center coordinates.
+        """
+        width, height = self.get_size()
+        return (
+            width // 2,
+            height //2
+        )
+
     def _on_close(self) -> None:
         """
         Handle window close event
