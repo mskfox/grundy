@@ -13,6 +13,8 @@ class Viewport(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self._running = True
 
+        self._setup_on_resize_event()
+
     def get_size(self) -> Tuple[int, int]:
         """
         Get the current window size
