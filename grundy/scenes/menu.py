@@ -1,7 +1,7 @@
-from ..core.scene import Scene
-from ..nodes.gradient_background import GradientBackgroundNode
-from ..nodes.flashing_text import FlashingTextNode
-from ..nodes.cooling_tower import CoolingTowerNode
+from grundy.core.scene import Scene
+from grundy.nodes.gradient_background import GradientBackgroundNode
+from grundy.nodes.flashing_text import FlashingTextNode
+from grundy.nodes.cooling_tower import CoolingTowerNode
 
 
 class MenuScene(Scene):

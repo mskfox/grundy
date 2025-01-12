@@ -6,7 +6,7 @@ from abc import ABC
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .engine import Engine
+    from grundy.core.engine import Engine
 
 
 class Node(ABC):

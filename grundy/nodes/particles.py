@@ -2,9 +2,9 @@ import numpy as np
 
 from typing import List, Optional
 
-from ..core.events import EventType
-from ..core.node import Node
-from ..utils import rgb_to_hex
+from grundy.core.events import EventType
+from grundy.core.node import Node
+from grundy.utils import rgb_to_hex
 
 PARTICLE_SPEED = 16
 MIN_SPEED = 0.3

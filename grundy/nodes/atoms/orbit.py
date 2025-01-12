@@ -3,7 +3,7 @@ import math
 from dataclasses import dataclass
 from typing import List
 
-from .utils import ELECTRON_RADIUS, ELECTRON_SPEED_FACTOR
+from grundy.nodes.atoms.utils import ELECTRON_RADIUS, ELECTRON_SPEED_FACTOR
 
 
 @dataclass

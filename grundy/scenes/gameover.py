@@ -1,7 +1,7 @@
-from ..core.scene import Scene
-from ..nodes.gradient_background import GradientBackgroundNode
-from ..nodes.game_over import GameOverNode
-from ..nodes.flashing_text import FlashingTextNode
+from grundy.core.scene import Scene
+from grundy.nodes.gradient_background import GradientBackgroundNode
+from grundy.nodes.game_over import GameOverNode
+from grundy.nodes.flashing_text import FlashingTextNode
 
 
 class GameOverScene(Scene):

@@ -2,10 +2,10 @@ import random
 
 from typing import Dict, TYPE_CHECKING
 
-from .events import EventType
+from grundy.core.events import EventType
 
 if TYPE_CHECKING:
-    from .engine import Engine
+    from grundy.core.engine import Engine
 
 
 class Pile:

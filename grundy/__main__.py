@@ -1,10 +1,10 @@
 import os
 
-from .core.engine import Engine
-from .core.events import EventType
-from .scenes.play import PlayScene
-from .scenes.gameover import GameOverScene
-from .scenes.menu import MenuScene
+from grundy.core.engine import Engine
+from grundy.core.events import EventType
+from grundy.scenes.play import PlayScene
+from grundy.scenes.gameover import GameOverScene
+from grundy.scenes.menu import MenuScene
 
 ICON_PATH = os.path.join(os.path.dirname(__file__), "assets", "atom.ico")
 

@@ -2,11 +2,11 @@ import time
 
 from typing import Optional
 
-from .canvas import Canvas
-from .events import Events, EventType
-from .logic import Logic
-from .scene import SceneManager
-from .viewport import Viewport
+from grundy.core.canvas import Canvas
+from grundy.core.events import Events, EventType
+from grundy.core.logic import Logic
+from grundy.core.scene import SceneManager
+from grundy.core.viewport import Viewport
 
 
 def _setup_on_resize_event(engine: 'Engine'):

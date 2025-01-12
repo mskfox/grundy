@@ -1,4 +1,4 @@
-from ..core.node import Node
+from grundy.core.node import Node
 
 
 class PowerPlantNode(Node):

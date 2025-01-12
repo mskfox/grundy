@@ -6,10 +6,10 @@ import random
 
 from typing import List, Tuple, Optional, TYPE_CHECKING
 
-from ...utils.geom import Point, Bounds
+from grundy.utils.geom import Point, Bounds
 
 if TYPE_CHECKING:
-    from .atom import Atom
+    from grundy.nodes.atoms.atom import Atom
 
 
 # Higher values equals to a faster rotation

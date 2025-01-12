@@ -2,7 +2,7 @@ import tkinter as tk
 
 from typing import Tuple, Literal, Optional, cast
 
-from ..utils.colors import parse_color, rgb_to_hex, ColorValue, RGBColor
+from grundy.utils.colors import parse_color, rgb_to_hex, ColorValue, RGBColor
 
 
 class Canvas(tk.Canvas):

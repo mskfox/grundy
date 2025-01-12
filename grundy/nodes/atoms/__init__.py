@@ -5,12 +5,11 @@ Atom simulation node for visualizing and interacting with atomic structures.
 from typing import List, Optional
 from dataclasses import dataclass
 
-from ...core.events import EventType
-from ...core.node import Node
-from ...utils.geom import Bounds
-from .atom import Atom
-from .utils import place_single_atom, pick_atom_at, calculate_electrons_distribution, Bounds, NUCLEUS_RADIUS
-from .warning import AtomWarning
+from grundy.core.events import EventType
+from grundy.core.node import Node
+from grundy.nodes.atoms.atom import Atom
+from grundy.nodes.atoms.utils import place_single_atom, pick_atom_at, calculate_electrons_distribution, Bounds, NUCLEUS_RADIUS
+from grundy.nodes.atoms.warning import AtomWarning
 
 
 @dataclass

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from ..core.events import EventType
-from ..core.node import Node
+from grundy.core.events import EventType
+from grundy.core.node import Node
 
 
 @dataclass

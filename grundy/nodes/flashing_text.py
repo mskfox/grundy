@@ -3,9 +3,9 @@ import math
 from dataclasses import dataclass
 from typing import Tuple, Optional
 
-from ..core.node import Node
-from ..core.events import EventType
-from ..utils.colors import rgb_to_hex
+from grundy.core.node import Node
+from grundy.core.events import EventType
+from grundy.utils.colors import rgb_to_hex
 
 
 @dataclass

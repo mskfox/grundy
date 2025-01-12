@@ -1,6 +1,6 @@
-from ..nodes import MoveHistoryNode
-from ..core.scene import Scene
-from ..nodes import GradientBackgroundNode, ParticlesNode, AtomsNode
+from grundy.nodes import MoveHistoryNode
+from grundy.core.scene import Scene
+from grundy.nodes import GradientBackgroundNode, ParticlesNode, AtomsNode
 
 
 class PlayScene(Scene):

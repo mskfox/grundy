@@ -5,11 +5,11 @@ Scene management for the Grundy game engine
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Type, TYPE_CHECKING
 
-from .events import EventType
-from .node import Node
+from grundy.core.events import EventType
+from grundy.core.node import Node
 
 if TYPE_CHECKING:
-    from .engine import Engine
+    from grundy.core.engine import Engine
 
 
 class Scene(ABC):

@@ -1,8 +1,8 @@
 from typing import Tuple, Literal
 
-from ..core.events import EventType
-from ..core.node import Node
-from ..utils.colors import ColorValue
+from grundy.core.events import EventType
+from grundy.core.node import Node
+from grundy.utils.colors import ColorValue
 
 
 class GradientBackgroundNode(Node):

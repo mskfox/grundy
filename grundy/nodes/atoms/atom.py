@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 
-from .orbit import Orbit
-from .utils import (
+from grundy.nodes.atoms.orbit import Orbit
+from grundy.nodes.atoms.utils import (
     calculate_electrons_distribution,
     calculate_real_radius,
     NUCLEUS_RADIUS,

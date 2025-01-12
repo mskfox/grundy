@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, Tuple, Callable
 
-from ..core.node import Node
-from ..core.events import EventType
+from grundy.core.node import Node
+from grundy.core.events import EventType
 
 
 @dataclass
