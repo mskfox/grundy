@@ -51,6 +51,7 @@ def parse_color(color: ColorValue) -> ParsedColor:
         'white': (255, 255, 255),
         'red': (255, 0, 0),
         'green': (0, 255, 0),
+        'skyblue': (135, 206, 235),
         'blue': (0, 0, 255),
         'yellow': (255, 255, 0),
         'cyan': (0, 255, 255),

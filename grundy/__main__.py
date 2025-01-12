@@ -1,10 +1,10 @@
 import os
 
-from grundy.nodes.click_play import ClickPlayNode
 from .core.engine import Engine
 from .core.events import EventType
 from .scenes.play import PlayScene
 from .scenes.gameover import GameOverScene
+from .scenes.menu import MenuScene
 
 ICON_PATH = os.path.join(os.path.dirname(__file__), "assets", "atom.ico")
 
@@ -15,7 +15,7 @@ def main() -> None:
     engine.viewport.geometry("800x600")
     engine.viewport.iconbitmap(ICON_PATH)
 
-    engine.scenes.register("menu", ClickPlayNode)
+    engine.scenes.register("menu", MenuScene)
     engine.scenes.register("play", PlayScene)
     engine.scenes.register("gameover", GameOverScene)
 

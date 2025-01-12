@@ -1,7 +1,7 @@
 from ..core.scene import Scene
 from ..nodes.gradient_background import GradientBackgroundNode
 from ..nodes.game_over import GameOverNode
-from ..nodes.click_play import ClickPlayNode
+from ..nodes.flashing_text import FlashingTextNode
 
 
 class GameOverScene(Scene):
@@ -18,11 +18,18 @@ class GameOverScene(Scene):
         game_over = GameOverNode(self.engine)
         self.add_node(game_over)
 
-        click_play = ClickPlayNode(self.engine)
+        click_play = FlashingTextNode(self.engine, "Click to play again")
         self.add_node(click_play)
 
     def on_entry(self) -> None:
-        pass
+        self._onclick_id = self.engine.viewport.bind("<Button-1>", self._on_click)
 
     def on_exit(self) -> None:
-        pass
+        self.engine.viewport.unbind("<Button-1>", self._onclick_id)
+
+    def _on_click(self, event) -> None:
+        """
+        Handle click events to restart the game.
+        """
+        self.engine.logic.reset()
+        self.engine.scenes.switch_to("play")
