@@ -9,26 +9,9 @@ from grundy.core.scene import SceneManager
 from grundy.core.viewport import Viewport
 
 
-def _setup_on_resize_event(engine: 'Engine'):
-    prev_width = None
-    prev_height = None
-
-    def _handle(event) -> None:
-        nonlocal prev_width, prev_height
-        width = event.width
-        height = event.height
-
-        if width != prev_width or height != prev_height:
-            prev_width = width
-            prev_height = height
-            engine.events.emit(EventType.WINDOW_RESIZE, width, height)
-
-    engine.viewport.bind("<Configure>", _handle)
-
-
 class Engine:
     def __init__(self) -> None:
-        self.viewport = Viewport()
+        self.viewport = Viewport(self)
         self.canvas = Canvas(self.viewport)
         self.events = Events()
         self.scenes = SceneManager(self)
@@ -36,8 +19,6 @@ class Engine:
 
         self._running = False
         self._last_frame_time: Optional[float] = None
-
-        _setup_on_resize_event(self)
 
     def run(self) -> None:
         """Start the game engine"""

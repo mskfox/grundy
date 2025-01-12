@@ -2,10 +2,14 @@ import tkinter as tk
 
 from typing import Tuple
 
+from grundy.core.events import EventType
+
 
 class Viewport(tk.Tk):
-    def __init__(self):
+    def __init__(self, engine):
         super().__init__()
+        self.engine = engine
+
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self._running = True
 
@@ -40,3 +44,19 @@ class Viewport(tk.Tk):
         Check if the viewport is still running
         """
         return self._running
+
+    def _setup_on_resize_event(self):
+        prev_width = None
+        prev_height = None
+
+        def _handle(event) -> None:
+            nonlocal prev_width, prev_height
+            width = event.width
+            height = event.height
+
+            if width != prev_width or height != prev_height:
+                prev_width = width
+                prev_height = height
+                self.engine.events.emit(EventType.WINDOW_RESIZE, width, height)
+
+        self.bind("<Configure>", _handle)
