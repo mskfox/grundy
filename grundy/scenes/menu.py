@@ -1,6 +1,7 @@
 from ..core.scene import Scene
 from ..nodes.gradient_background import GradientBackgroundNode
 from ..nodes.flashing_text import FlashingTextNode
+from ..nodes.cooling_tower import CoolingTowerNode
 
 
 class MenuScene(Scene):
@@ -13,6 +14,12 @@ class MenuScene(Scene):
             end_color="white"
         )
         self.add_node(gradient)
+
+        cooling_tower1 = CoolingTowerNode(engine, 100, 500)
+        self.add_node(cooling_tower1)
+
+        cooling_tower2 = CoolingTowerNode(engine, 200, 500)
+        self.add_node(cooling_tower2)
 
         click_play = FlashingTextNode(self.engine, "Click to play")
         self.add_node(click_play)
