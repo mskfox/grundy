@@ -70,3 +70,16 @@ def rgb_to_hex(color: ParsedColor) -> str:
     if color == "":
         return ""
     return f"#{color[0]:02x}{color[1]:02x}{color[2]:02x}"
+
+def lerp_color(
+        start_rgb: RGBColor,
+        end_rgb: RGBColor,
+        t: float
+) -> RGBColor:
+    """
+    Linearly interpolate between two RGB colors.
+    """
+    return cast(RGBColor, tuple(
+        int(start + (end - start) * t)
+        for start, end in zip(start_rgb, end_rgb)
+    ))

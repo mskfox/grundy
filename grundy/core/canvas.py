@@ -2,7 +2,7 @@ import tkinter as tk
 
 from typing import Tuple, Literal, Optional, cast
 
-from grundy.utils.colors import parse_color, rgb_to_hex, ColorValue, RGBColor
+from grundy.utils.colors import parse_color, rgb_to_hex, lerp_color, ColorValue, RGBColor
 
 
 class Canvas(tk.Canvas):
@@ -32,10 +32,7 @@ class Canvas(tk.Canvas):
 
         for i in range(steps):
             t = i / steps
-            current_rgb = cast(RGBColor, tuple(
-               int(start + (end - start) * t)
-               for start, end in zip(start_rgb, end_rgb)
-            ))
+            current_rgb = lerp_color(start_rgb, end_rgb, t)
             color = rgb_to_hex(current_rgb)
 
             if direction == "horizontal":
@@ -71,10 +68,7 @@ class Canvas(tk.Canvas):
 
         for i in range(steps):
             t = i / (steps - 1)  # t goes from 0 to 1
-            current_rgb = cast(RGBColor, tuple(
-               int(start + (end - start) * t)
-               for start, end in zip(start_rgb, end_rgb)
-            ))
+            current_rgb = lerp_color(start_rgb, end_rgb, t)
             color = rgb_to_hex(current_rgb)
 
             current_radius = radius - (step_radius * i)
