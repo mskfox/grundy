@@ -7,7 +7,7 @@ class CoolingTowerNode(Node):
         self._tag = f"coolingtower-{id(self)}"
 
         self._x, self._y = x, y
-        self._width, self._height = 80, 140
+        self._width, self._height = 120, 180
 
     def on_activated(self) -> None:
         self._create_cooling_tower()

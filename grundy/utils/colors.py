@@ -48,6 +48,7 @@ def parse_color(color: ColorValue) -> ParsedColor:
     # Handle named colors
     named_colors = {
         'black': (0, 0, 0),
+        'lightgrey': (211, 211, 211),
         'white': (255, 255, 255),
         'red': (255, 0, 0),
         'green': (0, 255, 0),

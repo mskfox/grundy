@@ -1,7 +1,7 @@
 import math
 
 from dataclasses import dataclass
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Literal
 
 from grundy.core.node import Node
 from grundy.core.events import EventType
@@ -16,6 +16,7 @@ class TextStyle:
     font_family: str = "Arial"
     font_size: int = 16
     default_color: str = "white"
+    padding: int = 50
 
 
 @dataclass
@@ -33,7 +34,7 @@ class FlashingTextNode(Node):
     A node that handles "Click to play" interaction.
     """
 
-    def __init__(self, engine, text: str) -> None:
+    def __init__(self, engine, text: str, anchor: Literal["bottom", "top"] = "bottom") -> None:
         """
         Initializes the ClickPlay node.
         """
@@ -41,12 +42,12 @@ class FlashingTextNode(Node):
         self._tag = f"flashingtext-{id(self)}"
 
         self._text = text
+        self._anchor = anchor
         self._anim_config = AnimationConfig()
         self._style = TextStyle()
 
         self._flashing_text_id: Optional[int] = None
         self._flashing_time: float = 0.0
-
 
     def on_activated(self) -> None:
         self.engine.events.subscribe(EventType.UPDATE, self._on_update)
@@ -64,10 +65,11 @@ class FlashingTextNode(Node):
         """
         width, height = self.engine.viewport.get_size()
         center_x, bottom_y = width / 2, height - 50
+        y = self._style.padding if self._anchor == "top" else height - self._style.padding
 
         self._flashing_text_id = self.engine.canvas.create_text(
             center_x,
-            bottom_y,
+            y,
             text=self._text,
             font=(self._style.font_family, self._style.font_size),
             fill=self._style.default_color,
@@ -79,11 +81,12 @@ class FlashingTextNode(Node):
         Handle window resize events by updating text positions.
         """
         center_x = width // 2
+        y = self._style.padding if self._anchor == "top" else height - self._style.padding
 
         self.engine.canvas.coords(
             self._flashing_text_id,
             center_x,
-            height - 50
+            y
         )
 
     def _on_update(self, current_time: float, delta_time: float) -> None:

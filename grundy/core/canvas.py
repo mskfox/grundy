@@ -90,6 +90,41 @@ class Canvas(tk.Canvas):
         outline = "" if outline == "" else rgb_to_hex(parse_color(outline))
         return self.create_oval(x - radius, y - radius, x + radius, y + radius, fill=color, outline=outline, tags=tags)
 
+    def create_trapeze(
+            self,
+            x: int,
+            y:int,
+            bottom_width: int,
+            top_width: int,
+            height: int,
+            fill: ColorValue = "",
+            outline: ColorValue = "",
+            tags: str = ""
+        ) -> int:
+        """
+        Create a trapeze on the canvas
+        """
+        color = rgb_to_hex(parse_color(fill))
+        outline = rgb_to_hex(parse_color(outline))
+
+        half_height = height // 2
+        half_bottom = bottom_width // 2
+        half_top = top_width // 2
+
+        vertices = [
+            x - half_bottom, y + half_height,  # Bottom left
+            x + half_bottom, y + half_height,  # Bottom right
+            x + half_top, y - half_height,     # Top right
+            x - half_top, y - half_height      # Top left
+        ]
+
+        return self.create_polygon(
+            *vertices,
+            fill=color,
+            outline=outline,
+            tags=tags
+        )
+
     def clear(self) -> None:
         """
         Clear all drawings from the canvas
