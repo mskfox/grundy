@@ -36,16 +36,22 @@ class Pile:
 
 
 class Logic:
-    initial_pile: int
+    _initial_pile: int
     piles: Dict[int, Pile]
 
     current_player: int
     last_winner: int
 
-    def __init__(self, engine: 'Engine', initial_pile=10):
+    def __init__(self, engine: 'Engine'):
         self.engine = engine
 
-        self.initial_pile = initial_pile
+        self._initial_pile = 0
+        self.last_winner = 0
+
+        self.reset()
+
+    def set_initial_pile(self, value: int):
+        self._initial_pile = value
         self.reset()
 
     def get_piles(self) -> Dict[int, Pile]:
@@ -55,7 +61,7 @@ class Logic:
         """
         Reset the game.
         """
-        pile = Pile(self.initial_pile)
+        pile = Pile(self._initial_pile)
         self.piles = {
             pile.id: pile
         }
