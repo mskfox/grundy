@@ -19,7 +19,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--width", type=int, default=800, help="set the initial screen width (default: 800)")
     parser.add_argument("--height", type=int, default=600, help="set the initial screen height (default: 600)")
     parser.add_argument(
-        "--pile", type=int, default=16,
+        "--pile", "-p", type=int, default=16,
         help="set the initial pile size (default: 16)"
     )
     parser.add_argument(
