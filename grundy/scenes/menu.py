@@ -1,5 +1,4 @@
 from grundy.core.scene import Scene
-from grundy.nodes.floating_clouds import FloatingCloudsNode
 from grundy.nodes.gradient_background import GradientBackgroundNode
 from grundy.nodes.flashing_text import FlashingTextNode
 from grundy.nodes.cooling_tower import CoolingTowerNode
