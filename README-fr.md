@@ -8,8 +8,6 @@
 - 🔄 Gestion de l'état du jeu
 - 🖥️ Redimensionnement de la fenêtre réactif
 
----
-
 ## Interface en ligne de commande
 
 ```bash
@@ -26,21 +24,15 @@ options:
                         choose the initial scene to start (default: 'menu')
 ```
 
----
-
 ## Architecture
 
 L'architecture du jeu repose sur une structure modulaire, permettant de séparer efficacement les différentes tâches tout en assurant une communication fluide entre les divers composants du système. Au cœur de cette architecture se trouve le système moteur `Engine`, il s'agit du coordinateur central gérant la fenêtre d'affichage, le canvas, les événements, les scènes et la logique du jeu.
-
----
 
 ## **Logique du jeu**
 
 Les mécaniques fondamentales du jeu sont gérées par le système **Logic**, qui suit l'état des piles et valide les actions des joueurs selon les règles du jeu de Grundy. Lorsqu'un joueur tente de diviser une pile, le système vérifie la validité du coup : les piles résultantes doivent être de tailles inégales et la division doit respecter les règles du jeu.
 
 Le système **Logic** est également responsable de l'alternance des tours et de l'exécution des coups. Il gère l'alternance entre le joueur humain et l'adversaire contrôlé par l'IA, valide les coups et diffuse les événements relatifs aux actions des joueurs. L'IA utilise une logique simple, choisissant au hasard des divisions valides. Le système suit l'évolution de la partie et déclare un vainqueur lorsque les conditions sont remplies.
-
----
 
 ## Système d'évènements
 
@@ -57,15 +49,11 @@ Voici une liste non-exhaustive des évènements existants:
 - `GAME_RESET`: Réinitialisation de la partie
 - `PILE_ADDED/REMOVED`: Etat d'une pile mise à jour
 
----
-
 ## Système de composants
 
 Le jeu utilise une architecture basée sur des nœuds où chaque composant visuel hérite de la classe de base `Node`.
 
 Chaque **Node** est un composant autonome ayant des fonctions spécifiques, qu'il s'agisse de la gestion d'éléments visuels ou de la logique du jeu. Les nodes gèrent leur propre cycle de vie, traitent les événements qui les concernent et gèrent leurs ressources. Cette indépendance permet une grande flexibilité, offrant la possibilité d'ajouter, de modifier ou de supprimer des composants sans perturber l'intégrité du système global.
-
----
 
 ## Système de scènes
 
