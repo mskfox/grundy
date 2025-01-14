@@ -61,7 +61,7 @@ class PowerPlantNode(Node):
     def __init__(
         self,
         engine,
-        position: Tuple[int, int],
+        x: int,
         config: Optional[PowerPlantConfig] = None
     ):
         """
@@ -74,7 +74,9 @@ class PowerPlantNode(Node):
         """
         super().__init__(engine)
         self._tag = f"powerplant-{id(self)}"
-        self._x, self._y = position
+
+        _, canvas_height = self.engine.viewport.get_size()
+        self._x, self._y = x, canvas_height
         self._config = config or PowerPlantConfig()
 
     def on_activated(self) -> None:

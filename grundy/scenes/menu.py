@@ -1,4 +1,5 @@
 from grundy.core.scene import Scene
+from grundy.nodes.floating_clouds import FloatingCloudsNode
 from grundy.nodes.gradient_background import GradientBackgroundNode
 from grundy.nodes.flashing_text import FlashingTextNode
 from grundy.nodes.cooling_tower import CoolingTowerNode
@@ -16,13 +17,13 @@ class MenuScene(Scene):
         )
         self.add_node(gradient)
 
-        cooling_tower1 = CoolingTowerNode(engine, 75, 600)
+        cooling_tower1 = CoolingTowerNode(engine, 75)
         self.add_node(cooling_tower1)
 
-        cooling_tower2 = CoolingTowerNode(engine, 225, 600)
+        cooling_tower2 = CoolingTowerNode(engine, 225)
         self.add_node(cooling_tower2)
 
-        power_plant = PowerPlantNode(engine, (620, 600))
+        power_plant = PowerPlantNode(engine, 620)
         self.add_node(power_plant)
 
         click_play = FlashingTextNode(self.engine, "Click to play", "top")

@@ -2,11 +2,12 @@ from grundy.core.node import Node
 
 
 class CoolingTowerNode(Node):
-    def __init__(self, engine, x, y):
+    def __init__(self, engine, x):
         super().__init__(engine)
         self._tag = f"coolingtower-{id(self)}"
 
-        self._x, self._y = x, y
+        _, viewport_height = self.engine.viewport.get_size()
+        self._x, self._y = x, viewport_height
         self._width, self._height = 120, 180
 
     def on_activated(self) -> None:
@@ -18,7 +19,6 @@ class CoolingTowerNode(Node):
 
     def _create_cooling_tower(self) -> None:
         canvas = self.engine.canvas
-        x, y = self._x, self._y
         w, h = self._width, self._height
 
         relative_offsets = [
@@ -29,9 +29,8 @@ class CoolingTowerNode(Node):
             (-w // 4, -h),          # Top-left (flared top)
             (-w // 3, -h // 2)      # Mid-top-left (neck)
         ]
-        points = [(x + dx, y + dy) for dx, dy in relative_offsets]
+        points = [(self._x + dx, self._y + dy) for dx, dy in relative_offsets]
 
-        # Create the polygon representing the cooling tower
         canvas.create_polygon(
             points,
             fill="lightgrey",
