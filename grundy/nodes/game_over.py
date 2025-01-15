@@ -17,13 +17,6 @@ class TextStyle:
     game_over_color: str = "red"
     default_color: str = "white"
 
-class WinnerType(Enum):
-    """
-    Enum to represent different winner types.
-    """
-    PLAYER = "You"
-    OPPONENT = "He"
-
 class GameOverNode(Node):
     """
     A node that handles the game over screen display.
@@ -60,11 +53,13 @@ class GameOverNode(Node):
         """
         Render the 'GAME OVER' text.
         """
+        display_text = "VICTORY" if self.engine.logic.last_winner == 1 else "DEFEAT"
+
         center_x, center_y = self.engine.viewport.get_center()
         self._game_over_text_id = self.engine.canvas.create_text(
             center_x,
             center_y - 50,
-            text="GAME OVER",
+            text=display_text,
             font=(self._style.font_family, self._style.game_over_size, "bold"),
             fill=self._style.game_over_color,
             tags=self._tag
@@ -75,12 +70,12 @@ class GameOverNode(Node):
         Render the winner announcement text.
         """
         center_x, center_y = self.engine.viewport.get_center()
-        winner_type = WinnerType.PLAYER if self.engine.logic.last_winner == 1 else WinnerType.OPPONENT
+        winner_name = "You" if self.engine.logic.last_winner == 1 else "He"
 
         self._winner_text_id = self.engine.canvas.create_text(
             center_x,
             center_y,
-            text=f"{winner_type.value} won the game!",
+            text=f"{winner_name} won the game!",
             font=(self._style.font_family, self._style.winner_size),
             fill=self._style.default_color,
             tags=self._tag
