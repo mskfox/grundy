@@ -11,9 +11,15 @@ class CoolingTowerNode(Node):
         self._width, self._height = 120, 180
 
     def on_activated(self) -> None:
+        """
+        Handle node activation
+        """
         self._create_cooling_tower()
 
     def on_deactivated(self) -> None:
+        """
+        Handle node deactivation
+        """
         canvas = self.engine.canvas
         canvas.delete(self._tag)
 

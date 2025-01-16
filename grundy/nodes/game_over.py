@@ -35,10 +35,16 @@ class GameOverNode(Node):
         self._style = TextStyle()
 
     def on_activated(self) -> None:
+        """
+        Handle node activation
+        """
         self.engine.events.subscribe(EventType.WINDOW_RESIZE, self._on_window_update)
         self._setup_display()
 
     def on_deactivated(self) -> None:
+        """
+        Handle node deactivation
+        """
         self.engine.canvas.delete(self._tag)
         self.engine.events.unsubscribe(EventType.WINDOW_RESIZE, self._on_window_update)
 

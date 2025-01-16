@@ -66,11 +66,6 @@ class PowerPlantNode(Node):
     ):
         """
         Initialize the power plant node.
-
-        Args:
-            engine: The rendering engine
-            position: (x, y) coordinates for the plant position
-            config: Optional custom configuration for the power plant
         """
         super().__init__(engine)
         self._tag = f"powerplant-{id(self)}"

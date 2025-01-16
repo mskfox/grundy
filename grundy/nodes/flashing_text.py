@@ -61,7 +61,7 @@ class FlashingTextNode(Node):
 
     def _create_text(self) -> None:
         """
-        Render the flashing 'Click to play again' text.
+        Render the flashing text.
         """
         width, height = self.engine.viewport.get_size()
         center_x, bottom_y = width / 2, height - 50

@@ -20,6 +20,9 @@ class ParticlesNode(Node):
         engine,
         density: float = 0.0001,  # particles per pixel
     ):
+        """
+        Initialize the particles node.
+        """
         super().__init__(engine)
         self._tag = f"id-{id(self)}"
         self._density = density
