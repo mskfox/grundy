@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import Callable, Dict, List, TYPE_CHECKING
+from typing import Callable, Dict, List
 
 
 class EventType(Enum):

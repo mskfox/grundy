@@ -1,8 +1,8 @@
 import tkinter as tk
 
-from typing import Tuple, Literal, Optional, cast
+from typing import Tuple, Literal
 
-from grundy.utils.colors import parse_color, rgb_to_hex, lerp_color, ColorValue, RGBColor
+from grundy.utils.colors import parse_color, rgb_to_hex, lerp_color, ColorValue
 
 
 class Canvas(tk.Canvas):
