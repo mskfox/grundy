@@ -46,7 +46,7 @@ class FlashingTextNode(Node):
         self._anim_config = AnimationConfig()
         self._style = TextStyle()
 
-        self._flashing_text_id: Optional[int] = None
+        self._flashing_text_id: int = 0
         self._flashing_time: float = 0.0
 
     def on_activated(self) -> None:
