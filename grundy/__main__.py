@@ -1,5 +1,4 @@
 import os
-import sys
 import argparse
 
 from grundy.core.engine import Engine
@@ -37,7 +36,11 @@ def main() -> None:
     engine = Engine()
     engine.viewport.title("Grundy's Game")
     engine.viewport.geometry(f"{args.width}x{args.height}")
-    engine.viewport.iconbitmap(ICON_PATH)
+
+    if os.path.exists(ICON_PATH):
+        engine.viewport.iconbitmap(ICON_PATH)
+    else:
+        print(f"Warning: Icon file not found at {ICON_PATH}, using default icon.")
 
     engine.logic.set_initial_pile(args.pile)
 
