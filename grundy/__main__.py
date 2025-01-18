@@ -9,6 +9,15 @@ from grundy.scenes.menu import MenuScene
 
 ICON_PATH = os.path.join(os.path.dirname(__file__), "assets", "atom.ico")
 
+def pilesize(value):
+    """
+    Custom type for argparse that ensures pile sizes are at least 3.
+    """
+    ivalue = int(value)
+    if ivalue < 3:
+        raise argparse.ArgumentTypeError(f"Pile size must be at least 3 (got {ivalue})")
+    return ivalue
+
 def parse_args() -> argparse.Namespace:
     """
     Parse command-line arguments for game settings.
@@ -18,8 +27,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--width", type=int, default=800, help="set the initial screen width (default: 800)")
     parser.add_argument("--height", type=int, default=600, help="set the initial screen height (default: 600)")
     parser.add_argument(
-        "--pile", "-p", type=int, default=16,
-        help="set the initial pile size (default: 16)"
+        "--piles", "-p", type=pilesize, nargs="+", default=[8, 8],
+        help="set multiple initial pile sizes (e.g., --piles 7 5 3)"
     )
     parser.add_argument(
         "--scene", choices=["menu", "play", "gameover"],
@@ -42,7 +51,7 @@ def main() -> None:
     else:
         print(f"Warning: Icon file not found at {ICON_PATH}, using default icon.")
 
-    engine.logic.set_initial_pile(args.pile)
+    engine.logic.set_initial_piles(args.piles)
 
     engine.scenes.register("menu", MenuScene)
     engine.scenes.register("play", PlayScene)

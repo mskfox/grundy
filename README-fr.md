@@ -33,7 +33,7 @@ Une implémentation élégante du jeu mathématique de Grundy sur le thème des 
 ## Interface en ligne de commande
 
 ```
-usage: python -m grundy [-h] [--width WIDTH] [--height HEIGHT] [--pile PILE] [--scene {menu,play,gameover}]
+usage: python -m grundy [-h] [--width WIDTH] [--height HEIGHT] [--piles PILES [PILES ...]] [--scene {menu,play,gameover}]
 
 Grundy's Game Settings
 
@@ -41,7 +41,8 @@ options:
   -h, --help            show this help message and exit
   --width WIDTH         set the initial screen width (default: 800)
   --height HEIGHT       set the initial screen height (default: 600)
-  --pile PILE, -p PILE  set the initial pile size (default: 16)
+  --piles, -p PILES [PILES ...]
+                        set multiple initial pile sizes (e.g., --piles 7 5 3)
   --scene {menu,play,gameover}
                         choose the initial scene to start (default: 'menu')
 ```

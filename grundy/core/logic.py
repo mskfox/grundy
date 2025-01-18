@@ -1,6 +1,6 @@
 import random
 
-from typing import Dict, TYPE_CHECKING
+from typing import Dict, List, TYPE_CHECKING
 
 from grundy.core.events import EventType
 
@@ -36,7 +36,7 @@ class Pile:
 
 
 class Logic:
-    _initial_pile: int
+    _initial_piles: List[int]
     piles: Dict[int, Pile]
 
     current_player: int
@@ -45,13 +45,16 @@ class Logic:
     def __init__(self, engine: 'Engine'):
         self.engine = engine
 
-        self._initial_pile = 0
+        self._initial_piles = []
         self.last_winner = 0
 
         self.reset()
 
-    def set_initial_pile(self, value: int):
-        self._initial_pile = value
+    def set_initial_piles(self, values: List[int]):
+        """
+        Set multiple initial piles.
+        """
+        self._initial_piles = values.copy()
         self.reset()
 
     def get_piles(self) -> Dict[int, Pile]:
@@ -61,10 +64,12 @@ class Logic:
         """
         Reset the game.
         """
-        pile = Pile(self._initial_pile)
-        self.piles = {
-            pile.id: pile
-        }
+        self.piles = {}
+
+        for size in self._initial_piles:
+            pile = Pile(size)
+            self.piles[pile.id] = pile
+
         self.current_player = 1
         self.engine.events.emit(EventType.GAME_RESET)
 
