@@ -5,7 +5,7 @@ from typing import Tuple, Optional, Literal
 
 from grundy.core.node import Node
 from grundy.core.events import EventType
-from grundy.utils.colors import rgb_to_hex
+from grundy.utils.colors import rgb_to_hex, lerp_color
 
 
 @dataclass
@@ -99,12 +99,13 @@ class FlashingTextNode(Node):
 
     def _calculate_flash_color(self, time: float) -> str:
         """
-        Calculate the color for the flashing text effect.
+        Calculate the color for the flashing text effect using linear interpolation.
         """
         factor = (1 + math.sin(time * self._anim_config.flash_speed)) / 2
 
-        r = int(self._anim_config.color_from[0] * (1 - factor) + self._anim_config.color_to[0] * factor)
-        g = int(self._anim_config.color_from[1] * (1 - factor) + self._anim_config.color_to[1] * factor)
-        b = int(self._anim_config.color_from[2] * (1 - factor) + self._anim_config.color_to[2] * factor)
-
-        return rgb_to_hex((r, g, b))
+        interpolated_color = lerp_color(
+            self._anim_config.color_from,
+            self._anim_config.color_to,
+            factor
+		)
+        return rgb_to_hex(interpolated_color)
