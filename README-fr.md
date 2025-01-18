@@ -1,5 +1,3 @@
-## Jeu de Grundy
-
 Une implémentation élégante du jeu mathématique de Grundy sur le thème des atomes.
 
 ## Fonctionnalités
@@ -11,22 +9,6 @@ Une implémentation élégante du jeu mathématique de Grundy sur le thème des 
 - 📊 Suivi de l'historique des mouvements
 - 🔄 Gestion de l'état du jeu
 - 🖥️ Redimensionnement de la fenêtre réactif
-
-## Interface en ligne de commande
-
-```bash
-usage: python -m grundy [-h] [--width WIDTH] [--height HEIGHT] [--pile PILE] [--scene {menu,play,gameover}]
-
-Grundy's Game Settings
-
-options:
-  -h, --help            show this help message and exit
-  --width WIDTH         set the initial screen width (default: 800)
-  --height HEIGHT       set the initial screen height (default: 600)
-  --pile PILE, -p PILE  set the initial pile size (default: 16)
-  --scene {menu,play,gameover}
-                        choose the initial scene to start (default: 'menu')
-```
 
 ## Comment jouer
 
@@ -45,6 +27,26 @@ options:
 4. **Gagner** :
    - Le jeu se termine lorsqu'aucune division valide n'est possible
    - Si vous ne pouvez pas faire de mouvement valide à votre tour, vous perdez
+
+---
+
+## Interface en ligne de commande
+
+```
+usage: python -m grundy [-h] [--width WIDTH] [--height HEIGHT] [--pile PILE] [--scene {menu,play,gameover}]
+
+Grundy's Game Settings
+
+options:
+  -h, --help            show this help message and exit
+  --width WIDTH         set the initial screen width (default: 800)
+  --height HEIGHT       set the initial screen height (default: 600)
+  --pile PILE, -p PILE  set the initial pile size (default: 16)
+  --scene {menu,play,gameover}
+                        choose the initial scene to start (default: 'menu')
+```
+
+---
 
 ## Architecture
 
