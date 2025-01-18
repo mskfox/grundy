@@ -1,11 +1,11 @@
-import tkinter as tk
+import turtle
 
 from typing import Tuple
 
 from grundy.core.events import EventType
 
 
-class Viewport(tk.Tk):
+class Viewport(turtle._Root):
     def __init__(self, engine):
         super().__init__()
         self.engine = engine

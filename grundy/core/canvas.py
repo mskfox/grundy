@@ -1,12 +1,12 @@
-import tkinter as tk
+import turtle
 
 from typing import Tuple, Literal
 
 from grundy.utils.colors import parse_color, rgb_to_hex, lerp_color, ColorValue
 
 
-class Canvas(tk.Canvas):
-    def __init__(self, master: tk.Tk):
+class Canvas(turtle.Canvas):
+    def __init__(self, master: turtle.TK.Tk):
         super().__init__(master)
         self.pack(expand=True, fill='both')
 
