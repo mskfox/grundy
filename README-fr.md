@@ -1,5 +1,6 @@
-Une implémentation élégante du jeu mathématique de Grundy sur le thème des atomes.
+## Jeu de Grundy
 
+Une implémentation élégante du jeu mathématique de Grundy sur le thème des atomes.
 
 ## Fonctionnalités
 
@@ -150,6 +151,18 @@ Le système de particules génère des effets atmosphériques :
 - Formes réalistes des tours de refroidissement
 - Proportions et placement corrects
 - Intégration fluide avec l’ensemble de la scène
+
+### Historique des Mouvements (`nodes/move_history.py`)
+- Affiche les derniers coups joués avec une présentation claire et lisible
+- Permet de configurer la longueur de l'historique
+- Écoute les événements émis par le système logique pour mettre à jour les informations
+
+### Autres Composants
+
+De nombreux autres composants enrichissent l'expérience de jeu, chacun ayant un rôle spécifique. Parmi eux :
+- **`nodes/flashing_text.py`** : Permet la création d'un texte personnalisé dont la couleur oscille progressivement entre une teinte de départ et une teinte d'arrivée pour attirer l'attention.
+- **`nodes/gradient_background.py`** : Gère l'affichage des arrière-plans dégradés utilisés dans différentes scènes pour une immersion visuelle renforcée.
+- ...
 
 ---
 
