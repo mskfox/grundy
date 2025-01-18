@@ -111,6 +111,9 @@ La scène de fin de jeu (`scenes/gameover.py`) comprend :
 ## Composants
 
 ### Visualisation Atomique (`nodes/atoms`)
+
+Les atomes sont placés aléatoirement dans une zone prédéfinie à l'aide d'un algorithme de force brute, qui semble être l'approche privilégiée dans ce contexte. L'algorithme tente `x` fois de positionner un atome sans chevauchement avec les autres. Si aucun emplacement valide n'est trouvé après ces tentatives, un avertissement graphique est affiché pour informer l'utilisateur.
+
 Le composant de visualisation atomique est un système sophistiqué qui gère :
 
 ##### Structure des Atomes
@@ -147,3 +150,10 @@ Le système de particules génère des effets atmosphériques :
 - Formes réalistes des tours de refroidissement
 - Proportions et placement corrects
 - Intégration fluide avec l’ensemble de la scène
+
+---
+
+## Utilitaires
+
+- Le module `utils/colors.py` fournit des outils pour manipuler les couleurs dans le jeu.
+- Le module `utils/geom.py` gère des calculs géométriques utiles dans le jeu.
