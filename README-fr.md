@@ -42,7 +42,7 @@ options:
   --width WIDTH         set the initial screen width (default: 800)
   --height HEIGHT       set the initial screen height (default: 600)
   --piles, -p PILES [PILES ...]
-                        set multiple initial pile sizes (e.g., --piles 7 5 3)
+                        set predefined initial piles sizes (e.g., --piles 7 5 3)
   --scene {menu,play,gameover}
                         choose the initial scene to start (default: 'menu')
 ```
