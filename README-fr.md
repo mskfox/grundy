@@ -50,6 +50,29 @@ options:
 
 L'architecture du jeu repose sur une structure modulaire, permettant de séparer efficacement les différentes tâches tout en assurant une communication fluide entre les divers composants du système. Au cœur de cette architecture se trouve le système moteur `Engine`, il s'agit du coordinateur central gérant la fenêtre d'affichage, le canvas, les événements, les scènes et la logique du jeu.
 
+## Pourquoi une Approche Orientée Objet ?
+
+1. **Encapsulation**
+   - Chaque classe gère ses propres responsabilités de manière isolée
+   - Réduction des dépendances et meilleure organisation du code
+
+2. **Extensibilité**
+   - Facilité d'ajout de nouvelles fonctionnalités
+   - Possibilité d'hériter des classes pour des besoins spécifiques
+   - Code plus structuré et plus facile à comprendre
+
+## Fenêtre et Canvas
+
+Une approche orientée objet pour remplacer les fonctionnalités de base de Turtle a été utilisé:
+
+### Viewport
+- **Équivalent Turtle**: `turtle.getcanvas().winfo_toplevel()`
+- **Responsabilité**: Gestion de la fenêtre principale et des événements système
+
+### Canvas
+- **Équivalent Turtle**: `turtle.getcanvas()`
+- **Responsabilité**: Surface de dessin avancée
+
 ## Logique du jeu
 
 Les mécaniques fondamentales du jeu sont gérées par le système **Logic**, qui suit l'état des piles et valide les actions des joueurs selon les règles du jeu de Grundy. Lorsqu'un joueur tente de diviser une pile, le système vérifie la validité du coup : les piles résultantes doivent être de tailles inégales et la division doit respecter les règles du jeu.
@@ -169,4 +192,4 @@ De nombreux autres composants enrichissent l'expérience de jeu, chacun ayant un
 ## Utilitaires
 
 - Le module `utils/colors.py` fournit des outils pour manipuler les couleurs dans le jeu.
-- Le module `utils/geom.py` gère des calculs géométriques utiles dans le jeu.
+- Le module `utils/geom.py` gère des calculs et structures géométriques utiles dans le jeu.
