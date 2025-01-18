@@ -196,3 +196,13 @@ De nombreux autres composants enrichissent l'expérience de jeu, chacun ayant un
 
 - Le module `utils/colors.py` fournit des outils pour manipuler les couleurs dans le jeu.
 - Le module `utils/geom.py` gère des calculs et structures géométriques utiles dans le jeu.
+
+---
+
+<br/>
+<br/>
+<br/>
+
+<img src="assets/menu.png" alt="Menu" width="602">
+<img src="assets/play.png" alt="Play" width="602">
+<img src="assets/gameover.png" alt="Gameover" width="602">

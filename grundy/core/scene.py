@@ -75,12 +75,16 @@ class SceneManager:
         self._current_scene: Optional[Scene] = None
 
     def register(self, name: str, scene_class: Type[Scene]) -> None:
-        """Register a new scene class with a name"""
+        """
+        Register a new scene class with a name
+        """
         scene = scene_class(self.engine)
         self._scenes[name] = scene
 
     def switch_to(self, name: str) -> None:
-        """Switch to a different scene"""
+        """
+        Switch to a different scene
+        """
         if name not in self._scenes:
             raise KeyError(f"Scene '{name}' not registered")
 

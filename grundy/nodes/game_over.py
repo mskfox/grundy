@@ -31,7 +31,7 @@ class GameOverNode(Node):
 
         self._game_over_text_id: Optional[int] = None
         self._winner_text_id: Optional[int] = None
-        
+
         self._style = TextStyle()
 
     def on_activated(self) -> None:

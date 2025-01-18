@@ -21,19 +21,25 @@ class Engine:
         self._last_frame_time: Optional[float] = None
 
     def run(self) -> None:
-        """Start the game engine"""
+        """
+        Start the game engine
+        """
         self._running = True
         self._last_frame_time = time.time()
         self._update()
         self.viewport.mainloop()
 
     def stop(self) -> None:
-        """Stop the game engine"""
+        """
+        Stop the game engine
+        """
         self._running = False
         self.viewport.quit()
 
     def _update(self) -> None:
-        """Main update loop"""
+        """
+        Main update loop
+        """
         if not self._running:
             return
 
