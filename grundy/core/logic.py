@@ -7,6 +7,11 @@ from grundy.core.events import EventType
 if TYPE_CHECKING:
     from grundy.core.engine import Engine
 
+RANDOM_RESET_MIN_QUANTITY = 1
+RANDOM_RESET_MAX_QUANTITY = 4
+RANDOM_RESET_MIN_SIZE = 3
+RANDOM_RESET_MAX_SIZE = 10
+
 
 class Pile:
     """
@@ -54,11 +59,28 @@ class Logic:
         """
         Set multiple initial piles.
         """
-        self._initial_piles = values.copy()
+        self._initial_piles = [] if values is None else values.copy()
         self.reset()
 
     def get_piles(self) -> Dict[int, Pile]:
         return self.piles
+
+    def _random_reset(self):
+        """
+        Performs a reset with random piles.
+        """
+        num_piles = random.randint(RANDOM_RESET_MIN_QUANTITY, RANDOM_RESET_MAX_QUANTITY)
+        for _ in range(num_piles):
+            pile = Pile(random.randint(RANDOM_RESET_MIN_SIZE, RANDOM_RESET_MAX_SIZE))
+            self.piles[pile.id] = pile
+
+    def _custom_reset(self):
+        """
+        Performs a reset with predefined piles.
+        """
+        for size in self._initial_piles:
+            pile = Pile(size)
+            self.piles[pile.id] = pile
 
     def reset(self):
         """
@@ -66,9 +88,10 @@ class Logic:
         """
         self.piles = {}
 
-        for size in self._initial_piles:
-            pile = Pile(size)
-            self.piles[pile.id] = pile
+        if self._initial_piles:
+            self._custom_reset()
+        else:
+            self._random_reset()
 
         self.current_player = 1
         self.engine.events.emit(EventType.GAME_RESET)

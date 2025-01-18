@@ -27,8 +27,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--width", type=int, default=800, help="set the initial screen width (default: 800)")
     parser.add_argument("--height", type=int, default=600, help="set the initial screen height (default: 600)")
     parser.add_argument(
-        "--piles", "-p", type=pilesize, nargs="+", default=[8, 8],
-        help="set multiple initial pile sizes (e.g., --piles 7 5 3)"
+        "--piles", "-p", type=pilesize, nargs="+",
+        help="set predefined initial piles sizes (e.g., --piles 7 5 3)"
     )
     parser.add_argument(
         "--scene", choices=["menu", "play", "gameover"],
