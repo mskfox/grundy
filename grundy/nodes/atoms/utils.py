@@ -4,6 +4,7 @@ Utility functions and constants for atom visualization.
 
 import random
 
+from dataclasses import dataclass
 from typing import List, Tuple, Optional, TYPE_CHECKING
 
 from grundy.utils.geom import Point, Bounds
@@ -16,108 +17,25 @@ if TYPE_CHECKING:
 ELECTRON_SPEED_FACTOR = 6
 
 NUCLEUS_RADIUS = 16
-ELECTRON_RADIUS = 2
+ELECTRON_RADIUS = 2.5
 ORBIT_FIRST_RADIUS_INCREMENT = 10
 ORBIT_RADIUS_INCREMENT = 10
 ATOM_MIN_DISTANCE = 6
+MAX_PLACEMENT_ATTEMPTS = 300
 
 
-def calculate_real_radius(layers: int) -> float:
+@dataclass
+class ElectronDistribution:
     """
-    Calculate the total radius of an atom including all electron layers.
-
-    Args:
-        layers: Number of electron layers
-
-    Returns:
-        Total radius of the atom
+    Result of electron distribution calculation.
     """
-    return NUCLEUS_RADIUS + ORBIT_FIRST_RADIUS_INCREMENT + (layers - 1) * ORBIT_RADIUS_INCREMENT
+    layer_count: int
+    electrons_per_layer: List[int]
 
 
-def atoms_overlap(atom1, x: int, y: int, radius: float) -> bool:
-    """
-    Check if two atoms would overlap at given positions.
-
-    Args:
-        atom1: First atom
-        x: X-coordinate of second atom
-        y: Y-coordinate of second atom
-        radius: Radius of second atom
-
-    Returns:
-        True if atoms would overlap, False otherwise
-    """
-    point1 = Point(atom1.x, atom1.y)
-    point2 = Point(x, y)
-    min_distance = calculate_real_radius(atom1.layers_quantity) + radius + ATOM_MIN_DISTANCE
-
-    return point1.distance_to(point2) < min_distance
-
-
-def place_single_atom(
-        area_bounds: Bounds,
-        existing_atoms: List,
-        layers_quantity: int,
-        max_attempts: int = 300
-) -> Tuple[bool, int, int]:
-    """
-    Try to place a single atom within a rectangular area.
-
-    Args:
-        area_bounds: Bundary of the spawning area
-        existing_atoms: List of existing atoms to avoid overlap
-        max_attempts: Maximum number of placement attempts
-
-    Returns:
-        Tuple of (success, x, y) where success is True if placement was successful
-    """
-    if area_bounds.x2 <= area_bounds.x1 or area_bounds.y2 <= area_bounds.y1:
-        return False, 0, 0
-
-    for _ in range(max_attempts):
-        x = random.randint(area_bounds.x1, area_bounds.x2)
-        y = random.randint(area_bounds.y1, area_bounds.y2)
-
-        if not any(atoms_overlap(atom, x, y, calculate_real_radius(layers_quantity))
-                   for atom in existing_atoms):
-            return True, x, y
-
-    print("Failed to find a position for an atom.")
-    return False, 0, 0
-
-
-def pick_atom_at(atoms: List, x: int, y: int) -> Optional['Atom']:
-    """
-    Find an atom at the given coordinates.
-
-    Args:
-        atoms: List of atoms to search
-        x: X-coordinate
-        y: Y-coordinate
-
-    Returns:
-        The atom at the given position or None if not found
-    """
-    point = Point(x, y)
-
-    for atom in atoms:
-        if point.distance_to(Point(atom.x, atom.y)) <= NUCLEUS_RADIUS:
-            return atom
-
-    return None
-
-
-def calculate_electrons_distribution(total_electrons: int) -> Tuple[int, List[int]]:
+def calculate_electrons_distribution(total_electrons: int) -> ElectronDistribution:
     """
     Calculate electron distribution across orbits based on quantum mechanics.
-
-    Args:
-        total_electrons: Total number of electrons to distribute
-
-    Returns:
-        Amount of layers.
-        List of electron counts for each orbit
     """
     orbits = []
     principal_quantum_number = 1
@@ -130,5 +48,63 @@ def calculate_electrons_distribution(total_electrons: int) -> Tuple[int, List[in
         total_electrons -= current_layer_electrons
         principal_quantum_number += 1
 
-    total_layers = len(orbits)
-    return total_layers, orbits
+    return ElectronDistribution(
+        layer_count=len(orbits),
+        electrons_per_layer=orbits
+    )
+
+
+def calculate_real_radius(layers: int) -> float:
+    """
+    Calculate the total radius of an atom including all electron layers.
+    """
+    return NUCLEUS_RADIUS + ORBIT_FIRST_RADIUS_INCREMENT + (layers - 1) * ORBIT_RADIUS_INCREMENT
+
+
+def atoms_overlap(atom1: 'Atom', x: int, y: int, radius: float) -> bool:
+    """
+    Check if two atoms would overlap at given positions.
+    """
+    point1 = Point(atom1.x, atom1.y)
+    point2 = Point(x, y)
+    min_distance = calculate_real_radius(atom1.distribution.layer_count) + radius + ATOM_MIN_DISTANCE
+
+    return point1.distance_to(point2) < min_distance
+
+
+def place_single_atom(
+    area_bounds: Bounds,
+    existing_atoms: List,
+    layer_count: int,
+) -> Tuple[bool, int, int]:
+    """
+    Try to place a single atom within a rectangular area.
+    Returns a tuple of (success, x, y) where success is True if placement was successful
+    """
+    if area_bounds.x2 <= area_bounds.x1 or area_bounds.y2 <= area_bounds.y1:
+        return False, 0, 0
+
+    for _ in range(MAX_PLACEMENT_ATTEMPTS):
+        x = random.randint(area_bounds.x1, area_bounds.x2)
+        y = random.randint(area_bounds.y1, area_bounds.y2)
+
+        if not any(
+            atoms_overlap(atom, x, y, calculate_real_radius(layer_count))
+            for atom in existing_atoms
+        ):
+            return True, x, y
+
+    return False, 0, 0
+
+
+def pick_atom_at(atoms: List, x: int, y: int) -> Optional['Atom']:
+    """
+    Find an atom at the given coordinates.
+    """
+    point = Point(x, y)
+
+    for atom in atoms:
+        if point.distance_to(Point(atom.x, atom.y)) <= NUCLEUS_RADIUS:
+            return atom
+
+    return None

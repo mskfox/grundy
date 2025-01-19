@@ -17,12 +17,14 @@ class Pile:
     """
     Represents a single pile.
     """
-    _size: int
     _id: int
+    _size: int
+    _kind: int
 
-    def __init__(self, size):
-        self._size = size
+    def __init__(self, size, kind):
         self._id = id(self)
+        self._size = size
+        self._kind = kind
 
     @property
     def id(self):
@@ -31,6 +33,10 @@ class Pile:
     @property
     def size(self):
         return self._size
+
+    @property
+    def kind(self):
+        return self._kind
 
     def can_split(self):
         """
@@ -71,7 +77,8 @@ class Logic:
         """
         num_piles = random.randint(RANDOM_RESET_MIN_QUANTITY, RANDOM_RESET_MAX_QUANTITY)
         for _ in range(num_piles):
-            pile = Pile(random.randint(RANDOM_RESET_MIN_SIZE, RANDOM_RESET_MAX_SIZE))
+            kind = random.randint(0, self.engine.palette_size - 1)
+            pile = Pile(random.randint(RANDOM_RESET_MIN_SIZE, RANDOM_RESET_MAX_SIZE), kind)
             self.piles[pile.id] = pile
 
     def _custom_reset(self):
@@ -79,7 +86,8 @@ class Logic:
         Performs a reset with predefined piles.
         """
         for size in self._initial_piles:
-            pile = Pile(size)
+            kind = random.randint(0, self.engine.palette_size - 1)
+            pile = Pile(size, kind)
             self.piles[pile.id] = pile
 
     def reset(self):
@@ -111,15 +119,15 @@ class Logic:
         new_size2 = pile.size - position
 
         del self.piles[pile_id]
-        new_pile1 = Pile(new_size1)
-        new_pile2 = Pile(new_size2)
+        new_pile1 = Pile(new_size1, pile.kind)
+        new_pile2 = Pile(new_size2, pile.kind)
 
         self.piles[new_pile1.id] = new_pile1
         self.piles[new_pile2.id] = new_pile2
 
         self.engine.events.emit(EventType.PILE_REMOVED, pile_id)
-        self.engine.events.emit(EventType.PILE_ADDED, new_pile1.id, new_size1)
-        self.engine.events.emit(EventType.PILE_ADDED, new_pile2.id, new_size2)
+        self.engine.events.emit(EventType.PILE_ADDED, new_pile1)
+        self.engine.events.emit(EventType.PILE_ADDED, new_pile2)
 
         self.engine.events.emit(EventType.MOVE_MADE, self.current_player, pile, new_pile1, new_pile2)
         if self.is_game_over():

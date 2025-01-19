@@ -6,7 +6,7 @@ from grundy.utils.colors import parse_color, rgb_to_hex, lerp_color, ColorValue
 
 
 class Canvas(turtle.Canvas):
-    def __init__(self, master: turtle.TK.Tk):
+    def __init__(self, master: turtle._Root):
         super().__init__(master)
         self.pack(expand=True, fill='both')
 

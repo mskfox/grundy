@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
+from grundy.core.logic import Pile
 from grundy.nodes.atoms.orbit import Orbit
 from grundy.nodes.atoms.utils import (
     calculate_electrons_distribution,
@@ -30,24 +31,15 @@ class Atom:
     """
 
     def __init__(
-            self,
-            engine,
-            x: int,
-            y: int,
-            pile_id: int,
-            pile_size: int,
-            config: AtomConfig = AtomConfig()
+        self,
+        engine,
+        x: int,
+        y: int,
+        pile: Pile,
+        config: AtomConfig = AtomConfig()
     ):
         """
         Initialize an atom.
-
-        Args:
-            engine: The rendering engine
-            x: X-coordinate of the nucleus
-            y: Y-coordinate of the nucleus
-            pile_id: Unique identifier for the atom pile
-            pile_size: Number of electrons
-            config: Visualization configuration
         """
         self.engine = engine
         self._tag = f"atom-{id(self)}"
@@ -55,13 +47,11 @@ class Atom:
 
         self.x: int = x
         self.y: int = y
-        self.size: int = pile_size
-        self.pile_id = pile_id
+        self.pile: Pile = pile
 
         # Calculate electron distribution and dimensions
-        _, self.layers = calculate_electrons_distribution(self.size)
-        self.layers_quantity = len(self.layers)
-        self.real_radius = calculate_real_radius(self.layers_quantity)
+        self.distribution = calculate_electrons_distribution(self.pile.size)
+        self.real_radius = calculate_real_radius(self.distribution.layer_count)
 
         self._orbits: List[Orbit] = []
 
@@ -112,7 +102,7 @@ class Atom:
         canvas.create_text(
             self.x,
             self.y,
-            text=str(self.size),
+            text=str(self.pile.size),
             font=(
                 self.config.font_family,
                 self.config.font_size,
@@ -126,14 +116,15 @@ class Atom:
         """
         Create and draw electron orbits.
         """
-        for layer_index, electron_count in enumerate(self.layers):
+        for layer_index, electron_count in enumerate(self.distribution.electrons_per_layer):
             radius = NUCLEUS_RADIUS + ORBIT_FIRST_RADIUS_INCREMENT + ORBIT_RADIUS_INCREMENT * layer_index
             orbit = Orbit(
                 self.engine,
                 self.x,
                 self.y,
                 radius,
-                electron_count
+                electron_count,
+                self.pile
             )
             orbit.draw()
             self._orbits.append(orbit)

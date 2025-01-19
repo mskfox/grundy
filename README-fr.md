@@ -43,9 +43,13 @@ options:
   --height HEIGHT       set the initial screen height (default: 600)
   --piles, -p PILES [PILES ...]
                         set predefined initial piles sizes (e.g., --piles 7 5 3)
+  --theme, --palette {vibrant,pastel,jewel,neon,earth,gradient,cyberpunk,dark,ocean,retro}
+                        choose the color palette (default: 'vibrant')
   --scene {menu,play,gameover}
                         choose the initial scene to start (default: 'menu')
 ```
+
+> ⚠️ - Le contraste entre les couleurs de chaque thème n'est pas suffisant pour distinguer facilement les couleurs, mais cela n'affecte pas de manière critique le gameplay, ce problème a donc été négligé.
 
 ---
 
@@ -141,6 +145,8 @@ La scène de fin de jeu (`scenes/gameover.py`) comprend :
 
 Les atomes sont placés aléatoirement dans une zone prédéfinie à l'aide d'un algorithme de force brute, qui semble être l'approche privilégiée dans ce contexte. L'algorithme tente `x` fois de positionner un atome sans chevauchement avec les autres. Si aucun emplacement valide n'est trouvé après ces tentatives, un avertissement graphique est affiché pour informer l'utilisateur.
 
+Au début de la partie, chaque atome est associé à un type correspondant à un entier. Lorsqu'un atome subit une fission, il se divise en deux atomes du même type. Il est possible d'identifier le type d'un atome grâce à sa couleur, chaque type étant lié à une couleur spécifique de la palette choisie au début du jeu.
+
 Le composant de visualisation atomique est un système sophistiqué qui gère :
 
 ##### Structure des Atomes
@@ -196,12 +202,9 @@ De nombreux autres composants enrichissent l'expérience de jeu, chacun ayant un
 
 - Le module `utils/colors.py` fournit des outils pour manipuler les couleurs dans le jeu.
 - Le module `utils/geom.py` gère des calculs et structures géométriques utiles dans le jeu.
+- Le module `utils/palettes.py` contient la totalité des palettes disponibles. Pour des raisons de compatibilité, chaque palette doit avoir la même longueur.
 
 ---
-
-<br/>
-<br/>
-<br/>
 
 <img src="assets/menu.png" alt="Menu" width="602">
 <img src="assets/play.png" alt="Play" width="602">

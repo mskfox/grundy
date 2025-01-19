@@ -6,8 +6,10 @@ from grundy.core.events import EventType
 from grundy.scenes.play import PlayScene
 from grundy.scenes.gameover import GameOverScene
 from grundy.scenes.menu import MenuScene
+from grundy.utils.palettes import PALETTES, DEFAULT_PALETTE
 
 ICON_PATH = os.path.join(os.path.dirname(__file__), "assets", "atom.ico")
+
 
 def pilesize(value):
     """
@@ -31,6 +33,10 @@ def parse_args() -> argparse.Namespace:
         help="set predefined initial piles sizes (e.g., --piles 7 5 3)"
     )
     parser.add_argument(
+        "--theme", "--palette", choices=list(PALETTES.keys()),
+        default=DEFAULT_PALETTE, help=f"choose the color palette (default: '{DEFAULT_PALETTE}')"
+    )
+    parser.add_argument(
         "--scene", choices=["menu", "play", "gameover"],
         default="menu",help="choose the initial scene to start (default: 'menu')"
     )
@@ -45,6 +51,8 @@ def main() -> None:
     engine = Engine()
     engine.viewport.title("Grundy's Game")
     engine.viewport.geometry(f"{args.width}x{args.height}")
+
+    engine.set_palette(args.theme)
 
     if os.path.exists(ICON_PATH):
         engine.viewport.iconbitmap(ICON_PATH)

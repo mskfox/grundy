@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from grundy.core.events import EventType
 from grundy.core.node import Node
+from grundy.core.logic import Pile
 from grundy.nodes.atoms.atom import Atom
 from grundy.nodes.atoms.utils import place_single_atom, pick_atom_at, calculate_electrons_distribution, Bounds, NUCLEUS_RADIUS
 from grundy.nodes.atoms.warning import AtomWarning
@@ -59,11 +60,11 @@ class AtomsNode(Node):
         self._unbind_mouse_events()
         self._cleanup_atoms()
 
-    def add_atom(self, x: int, y: int, pile_id: int, pile_size: int) -> None:
+    def add_atom(self, x: int, y: int, pile: Pile) -> None:
         """
         Add a new atom to the visualization.
         """
-        atom = Atom(self.engine, x, y, pile_id, pile_size)
+        atom = Atom(self.engine, x, y, pile)
         atom.draw()
         self._atoms.append(atom)
 
@@ -71,7 +72,7 @@ class AtomsNode(Node):
         """
         Find an atom by its pile ID.
         """
-        return next((atom for atom in self._atoms if atom.pile_id == pile_id), None)
+        return next((atom for atom in self._atoms if atom.pile.id == pile_id), None)
 
     def _subscribe_to_events(self) -> None:
         """
@@ -131,15 +132,15 @@ class AtomsNode(Node):
 
         fully_successful = True
         for pile in piles.values():
-            layers_quantity, _ = calculate_electrons_distribution(pile.size)
+            distribution = calculate_electrons_distribution(pile.size)
             success, x, y = place_single_atom(
                 self._viewport_bounds,
                 self._atoms,
-                layers_quantity
+                distribution.layer_count
             )
 
             if success:
-                self.add_atom(x, y, pile.id, pile.size)
+                self.add_atom(x, y, pile)
             else:
                 self._warning.start_warning()
                 fully_successful = False
@@ -164,7 +165,7 @@ class AtomsNode(Node):
         Calculate the split position based on drag distance.
         Only allows split up to half the size to prevent symetric duplicates.
         """
-        max_allowed = (atom.size + 1) // 2
+        max_allowed = (atom.pile.size + 1) // 2
 
         raw_distance = ((event_x - atom.x) ** 2 + (event_y - atom.y) ** 2) ** 0.5
         adjusted_distance = max(0, raw_distance - NUCLEUS_RADIUS)
@@ -207,7 +208,7 @@ class AtomsNode(Node):
         """
         if self._selected_atom:
             units = self._calculate_split_pos(event.x, event.y, self._selected_atom)
-            self.engine.logic.player_move(self._selected_atom.pile_id, units)
+            self.engine.logic.player_move(self._selected_atom.pile.id, units)
             self._remove_split_text()
             self._selected_atom = None
 
@@ -232,7 +233,7 @@ class AtomsNode(Node):
         if self._split_text_id and self._selected_atom:
             self.engine.canvas.itemconfig(
                 self._split_text_id,
-                text=f"{self._selected_atom.size - units} | {units}"
+                text=f"{self._selected_atom.pile.size - units} | {units}"
             )
             # Update position to stay above atom
             self.engine.canvas.coords(
@@ -270,19 +271,19 @@ class AtomsNode(Node):
         """
         self._setup_atoms()
 
-    def _on_pile_added(self, pile_id: int, pile_size: int) -> None:
+    def _on_pile_added(self, pile: Pile) -> None:
         """
         Handle new pile addition events.
         """
-        layers_quantity, _ = calculate_electrons_distribution(pile_size)
+        distribution = calculate_electrons_distribution(pile.size)
         success, x, y = place_single_atom(
             self._viewport_bounds,
             self._atoms,
-            layers_quantity
+            distribution.layer_count
         )
 
         if success:
-            self.add_atom(x, y, pile_id, pile_size)
+            self.add_atom(x, y, pile)
         else:
             self._warning.start_warning()
 

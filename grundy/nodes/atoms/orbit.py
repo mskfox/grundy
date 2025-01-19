@@ -1,8 +1,9 @@
 import math
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
+from grundy.core.logic import Pile
 from grundy.nodes.atoms.utils import ELECTRON_RADIUS, ELECTRON_SPEED_FACTOR
 
 
@@ -12,7 +13,6 @@ class OrbitConfig:
     Configuration for orbit visualization.
     """
     orbit_color: str = "black"
-    electron_fill: str = "red"
     electron_outline: str = "black"
 
 
@@ -28,18 +28,11 @@ class Orbit:
         nucleus_y: int,
         radius: int,
         electrons: int,
+        pile: Pile,
         config: OrbitConfig = OrbitConfig()
     ):
         """
         Initialize an electron orbit.
-
-        Args:
-            engine: The rendering engine
-            nucleus_x: X-coordinate of the nucleus center
-            nucleus_y: Y-coordinate of the nucleus center
-            radius: Orbit radius
-            electrons: Number of electrons in this orbit
-            config: Visualization configuration
         """
         self.engine = engine
         self._tag = f"orbit-{id(self)}"
@@ -49,6 +42,7 @@ class Orbit:
         self.nucleus_y = nucleus_y
         self.radius: int = radius
         self.size: int = electrons
+        self.pile: Pile = pile
 
         self._electrons: List[int] = []
 
@@ -118,7 +112,7 @@ class Orbit:
                 x,
                 y,
                 ELECTRON_RADIUS,
-                fill=self.config.electron_fill,
+                fill=self.engine.current_palette[self.pile.kind],
                 outline=self.config.electron_outline,
                 tags=self._tag
             )
