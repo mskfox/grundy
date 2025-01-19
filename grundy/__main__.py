@@ -52,7 +52,7 @@ def main() -> None:
     engine.viewport.title("Grundy's Game")
     engine.viewport.geometry(f"{args.width}x{args.height}")
 
-    engine.set_palette(args.theme)
+    engine.theme.set(args.theme)
 
     if os.path.exists(ICON_PATH):
         engine.viewport.iconbitmap(ICON_PATH)
