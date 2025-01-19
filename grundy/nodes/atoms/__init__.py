@@ -127,7 +127,9 @@ class AtomsNode(Node):
         """
         Initialize atoms based on current game state.
         """
+        self._viewport_bounds = self._calculate_viewport_bounds()
         self._cleanup_atoms()
+
         piles = self.engine.logic.get_piles()
 
         fully_successful = True
