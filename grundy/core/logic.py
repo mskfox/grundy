@@ -77,7 +77,7 @@ class Logic:
         """
         num_piles = random.randint(RANDOM_RESET_MIN_QUANTITY, RANDOM_RESET_MAX_QUANTITY)
         for _ in range(num_piles):
-            kind = random.randint(0, self.engine.palette_size - 1)
+            kind = random.randint(0, self.engine.theme.size - 1)
             pile = Pile(random.randint(RANDOM_RESET_MIN_SIZE, RANDOM_RESET_MAX_SIZE), kind)
             self.piles[pile.id] = pile
 
@@ -86,7 +86,7 @@ class Logic:
         Performs a reset with predefined piles.
         """
         for size in self._initial_piles:
-            kind = random.randint(0, self.engine.palette_size - 1)
+            kind = random.randint(0, self.engine.theme.size - 1)
             pile = Pile(size, kind)
             self.piles[pile.id] = pile
 

@@ -112,7 +112,7 @@ class Orbit:
                 x,
                 y,
                 ELECTRON_RADIUS,
-                fill=self.engine.current_palette[self.pile.kind],
+                fill=self.engine.theme.current[self.pile.kind],
                 outline=self.config.electron_outline,
                 tags=self._tag
             )
