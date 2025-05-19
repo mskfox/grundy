@@ -4,6 +4,7 @@ from typing import List, Optional
 
 from grundy.core.theme import ThemeProvider
 from grundy.core.canvas import Canvas
+from grundy.core.computer import Computer
 from grundy.core.events import Events, EventType
 from grundy.core.logic import Logic
 from grundy.core.scene import SceneManager
@@ -17,6 +18,7 @@ class Engine:
         self.canvas = Canvas(self.viewport)
         self.events = Events()
         self.scenes = SceneManager(self)
+        self.computer = Computer(self)
         self.logic = Logic(self)
 
         self._running = False

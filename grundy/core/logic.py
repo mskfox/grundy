@@ -156,16 +156,14 @@ class Logic:
         if self.is_player_turn():
             return
 
-        splittable_piles = [pile for pile in self.piles.values() if pile.can_split()]
-        if not splittable_piles:
+        success, pile_id, position = self.engine.computer.think()
+        if not success:
             return
 
-        pile = random.choice(splittable_piles)
-
-        max_position = (pile.size // 2) - 1
-        position = random.randint(1, max(1, max_position))
-
-        self._make_move(pile.id, position)
+        self.engine.canvas.after(
+            400, self._make_move,
+            pile_id, position
+        )
 
     def _is_valid_move(self, pile_id: int, position: int) -> bool:
         """
