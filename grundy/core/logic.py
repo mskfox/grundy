@@ -21,7 +21,7 @@ class Pile:
     _size: int
     _kind: int
 
-    def __init__(self, size, kind):
+    def __init__(self, size, kind = 0):
         self._id = id(self)
         self._size = size
         self._kind = kind
@@ -156,8 +156,8 @@ class Logic:
         if self.is_player_turn():
             return
 
-        success, pile_id, position = self.engine.computer.think()
-        if not success:
+        pile_id, position = self.engine.computer.think()
+        if pile_id is None or position is None:
             return
 
         self.engine.canvas.after(
