@@ -26,10 +26,12 @@ class Computer:
         for pile in piles:
             if not pile.can_split():
                 continue
+
             g_before = self.pile_value(pile.size)
             for i in range(1, ((pile.size - 1) // 2) + 1):
                 g_after = self.pile_value(i) ^ self.pile_value(pile.size - i)
                 total_xor_after = total_xor ^ g_before ^ g_after
+
                 if total_xor_after == 0:
                     print(f"Winning move found: pile {pile.id}, split into {i} and {pile.size - i}")
                     return pile.id, i
@@ -49,6 +51,7 @@ class Computer:
 
         g = self.mex(moves)
         self._g_cache[n] = g
+
         return g
 
     @staticmethod
@@ -74,6 +77,7 @@ class Computer:
             p for p in self.engine.logic.get_piles().values()
             if p.can_split()
         ]
+
         if not splittable:
             print("No splittable piles remain.")
             return None, None
