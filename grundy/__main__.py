@@ -28,6 +28,7 @@ def parse_args() -> argparse.Namespace:
 
     parser.add_argument("--width", type=int, default=800, help="set the initial screen width (default: 800)")
     parser.add_argument("--height", type=int, default=600, help="set the initial screen height (default: 600)")
+    parser.add_argument("--no-cheat",action='store_true', help="disable computer cheating (default: False)")
     parser.add_argument(
         "--piles", "-p", type=pilesize, nargs="+",
         help="set predefined initial piles sizes (e.g., --piles 7 5 3)"
@@ -60,6 +61,7 @@ def main() -> None:
         print(f"Warning: Icon file not found at {ICON_PATH}, using default icon.")
 
     engine.logic.set_initial_piles(args.piles)
+    engine.computer.set_cheat_mode(not args.no_cheat)
 
     engine.scenes.register("menu", MenuScene)
     engine.scenes.register("play", PlayScene)

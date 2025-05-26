@@ -11,6 +11,29 @@ class Computer:
     def __init__(self, engine: 'Engine'):
         self.engine = engine
         self._g_cache: dict[int, int] = {0: 0, 1: 0}
+        self._cheat_mode = False
+
+    def set_cheat_mode(self, state: bool):
+        self._cheat_mode = state
+
+    def is_cheating(self) -> bool:
+        """
+        Check if the computer is in cheat mode.
+        :return: True if the computer is cheating, False otherwise.
+        """
+        return self._cheat_mode
+
+    def can_win(self) -> bool:
+        """
+        Check if the computer can win with the current game state.
+        This is determined by checking if the nim-sum (XOR of Grundy values) is non-zero.
+        """
+        piles = self.engine.logic.get_piles().values()
+        total_xor = 0
+        for p in piles:
+            total_xor ^= self.pile_value(p.size)
+
+        return total_xor != 0
 
     def think(self) -> tuple[int, int]:
         piles = list(self.engine.logic.get_piles().values())

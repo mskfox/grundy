@@ -21,6 +21,8 @@ class Engine:
         self.computer = Computer(self)
         self.logic = Logic(self)
 
+        self.logic.reset()
+
         self._running = False
         self._last_frame_time: Optional[float] = None
 

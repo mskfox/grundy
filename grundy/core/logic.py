@@ -59,8 +59,6 @@ class Logic:
         self._initial_piles = []
         self.last_winner = 0
 
-        self.reset()
-
     def set_initial_piles(self, values: List[int]):
         """
         Set multiple initial piles.
@@ -101,8 +99,16 @@ class Logic:
         else:
             self._random_reset()
 
-        self.current_player = 1
+
+        if self.engine.computer.is_cheating():
+            self.current_player = 2 if self.engine.computer.can_win() else 1
+        else:
+            self.current_player = random.randint(1, 2)
+
         self.engine.events.emit(EventType.GAME_RESET)
+
+        if self.current_player == 2:
+            self.computer_move()
 
     def _make_move(self, pile_id: int, position: int) -> bool:
         """
