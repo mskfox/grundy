@@ -1,6 +1,5 @@
 import random
-
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from grundy.core.logic import Pile
 
@@ -10,6 +9,7 @@ if TYPE_CHECKING:
 class Computer:
     def __init__(self, engine: 'Engine'):
         self.engine = engine
+
         self._g_cache: dict[int, int] = {0: 0, 1: 0}
         self._cheat_mode = False
 
@@ -17,30 +17,30 @@ class Computer:
         self._cheat_mode = state
 
     def is_cheating(self) -> bool:
-        """
-        Check if the computer is in cheat mode.
-        :return: True if the computer is cheating, False otherwise.
-        """
         return self._cheat_mode
+
+    def _compute_total_xor(self) -> int:
+        """
+        Compute the XOR (nim-sum) of Grundy values for all piles
+        """
+        total_xor = 0
+        for pile in self.engine.logic.get_piles().values():
+            total_xor ^= self._pile_value(pile.size)
+        return total_xor
 
     def can_win(self) -> bool:
         """
-        Check if the computer can win with the current game state.
-        This is determined by checking if the nim-sum (XOR of Grundy values) is non-zero.
+        Check if computer can win by verifying if nim-sum is non-zero
         """
-        piles = self.engine.logic.get_piles().values()
-        total_xor = 0
-        for p in piles:
-            total_xor ^= self.pile_value(p.size)
+        return self._compute_total_xor() != 0
 
-        return total_xor != 0
-
-    def think(self) -> tuple[int, int]:
+    def think(self) -> tuple[Optional[int], Optional[int]]:
+        """
+        Think of a winning move based on the current game state.
+        If no winning move is found, it will think randomly.
+        """
         piles = list(self.engine.logic.get_piles().values())
-
-        total_xor = 0
-        for p in piles:
-            total_xor ^= self.pile_value(p.size)
+        total_xor = self._compute_total_xor()
 
         if total_xor == 0:
             print("No winning move (nim-sum=0), thinking randomly...")
@@ -50,52 +50,55 @@ class Computer:
             if not pile.can_split():
                 continue
 
-            g_before = self.pile_value(pile.size)
-            for i in range(1, ((pile.size - 1) // 2) + 1):
-                g_after = self.pile_value(i) ^ self.pile_value(pile.size - i)
-                total_xor_after = total_xor ^ g_before ^ g_after
+            pile_size = pile.size
+            g_before = self._pile_value(pile_size)
+            base = total_xor ^ g_before
+            max_i = (pile_size - 1) // 2
 
-                if total_xor_after == 0:
-                    print(f"Winning move found: pile {pile.id}, split into {i} and {pile.size - i}")
+            for i in range(1, max_i + 1):
+                j = pile_size - i
+                g_after = self._pile_value(i) ^ self._pile_value(j)
+                if base ^ g_after == 0:
+                    print(f"Winning move found: pile {pile.id}, split into {i} and {j}")
                     return pile.id, i
 
-        # Shouldn't happen, but just in case.
         print("No winning move found after search, thinking randomly...")
         return self.think_random()
 
-    def pile_value(self, n: int) -> int:
+    def _pile_value(self, n: int) -> int:
+        """
+        Compute the Grundy value for a pile of size n.
+        Uses memoization to cache results for efficiency.
+        """
         if n in self._g_cache:
             return self._g_cache[n]
 
         moves = {
-            self.pile_value(i) ^ self.pile_value(n - i)
+            self._pile_value(i) ^ self._pile_value(n - i)
             for i in range(1, ((n - 1) // 2) + 1)
         }
 
-        g = self.mex(moves)
+        g = self._mex(moves)
         self._g_cache[n] = g
-
         return g
 
     @staticmethod
-    def mex(s: set[int]) -> int:
+    def _mex(s: set[int]) -> int:
         """
-        Return the minimum excludant of a set of integers.
-        The minimum excludant is the smallest non-negative integer not in the set.
-        :param s: The set of integers.
-        :return: The minimum excludant.
+        Compute the minimum excludant (mex) of a set of integers.
+        The mex is the smallest non-negative integer not in the set.
         """
         m = 0
         while m in s:
             m += 1
         return m
 
-    def think_random(self) -> tuple[int, int]:
+    def think_random(self) -> tuple[Optional[int], Optional[int]]:
         """
-        Pick any legal split uniformly.
+        Think of a random move when no winning move is found.
+        Returns a tuple of (pile_id, position) or (None, None) if no valid move exists.
         """
         print("Thinking randomly...")
-
         splittable = [
             p for p in self.engine.logic.get_piles().values()
             if p.can_split()
@@ -107,7 +110,8 @@ class Computer:
 
         pile = random.choice(splittable)
         max_position = (pile.size - 1) // 2
-        position = random.randint(1, max(1, max_position))
+        position = random.randint(1, max_position)
 
-        print(f"Random move: pile {pile.id}, split into {position} and {pile.size - position}")
+        j = pile.size - position
+        print(f"Random move: pile {pile.id}, split into {position} and {j}")
         return pile.id, position
