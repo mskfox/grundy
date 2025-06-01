@@ -39,7 +39,7 @@ class Computer:
         Think of a winning move based on the current game state.
         If no winning move is found, it will think randomly.
         """
-        piles = list(self.engine.logic.get_piles().values())
+        piles = self.engine.logic.get_piles().values()
         total_xor = self._compute_total_xor()
 
         if total_xor == 0:
